@@ -1,4 +1,3 @@
-#include <OneWire.h>
 #include <DallasTemperature.h>
 #include <SPI.h>
 #include <SD.h>
@@ -21,6 +20,7 @@ OneWire oneWire(PIN_TEMPERATURE);
 DallasTemperature sensors(&oneWire);
 
 RTC_DS1307 rtc; // Определяем Real Time Clock объект
+DateTime now;
 
 Servo servo;
 
@@ -29,8 +29,7 @@ iarduino_OLED_txt oled(0x3C);
 extern uint8_t SmallFontRus[];
 
 File dataFile;
-DateTime now;
-
+char dataFileName[12];
 //  ROM = 28 FF AA B5 C1 17 4 CD
 //    Chip = DS18B20
 //    Data = 1 8C 1 4B 46 7F FF C 10 58  CRC=58
@@ -60,7 +59,7 @@ void setup() {
   while (!Serial);
   
   Serial.begin(9600);
-
+  Serial.println("RTC loading...");
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
     while (1);
@@ -69,7 +68,9 @@ void setup() {
   if (!rtc.isrunning()) {
     Serial.println("RTC is NOT runing!");
   }
-
+  Serial.println("RTC loaded");
+  
+  Serial.println("LCD loading...");
   lcd.begin();
   lcd.setCursor(0, 0); // 1 строка
   lcd.print("LCD I2C Test - 20x4");
@@ -79,32 +80,38 @@ void setup() {
   lcd.print("01234567899876543210");
   lcd.setCursor(0, 3); // 4 строка
   lcd.print("  CHINGACHGOOK.NET");
-
+  Serial.println("LCD loaded");
+  
+  Serial.println("OLED loading...");
   oled.begin();
   oled.setFont(SmallFontRus);
   oled.setCursor(16,4);
   oled.print("OLED");
+  
+  Serial.println("OLED loaded");
 
+  Serial.println("SD loading...");
   if (!SD.begin(PIN_SD)) {
     Serial.println("Card failed, or not present");
     return;
   }
-  // Текущая дата из часов реального времени
   now = rtc.now();
-  char buffer [23] = "";
-  sprintf(buffer, "%04d_%02d_%02d_%02d_%02d_%02d.txt", now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
-  Serial.println(buffer);
-  dataFile = SD.open(buffer, FILE_WRITE);
+  sprintf(dataFileName, "%04d%02d%02d.txt", now.year(), now.month(), now.day());
+  Serial.print("File: ");
+  Serial.println(dataFileName);
+  // Текущая дата из часов реального времени
+  dataFile = SD.open(dataFileName, FILE_WRITE);
   dataFile.print("Начало логирования: ");
-  dataFile.print(now.year(), DEC);
-  dataFile.print("-");
-  dataFile.print(now.month(), DEC);
-  dataFile.print("-");
-  dataFile.print(now.day(), DEC);
-  dataFile.println(" ");
-  dataFile.println("Температура Время");
+  dataFile.print(now.hour());
+  dataFile.print(":");
+  dataFile.print(now.minute());
+  dataFile.print(":");
+  dataFile.print(now.second());
+  dataFile.println();
   dataFile.close();
+  Serial.println("SD loaded");
   
+  Serial.println("Sensors loading...");
   sensors.begin();
   // locate devices on the bus
   /*Serial.print("Locating devices...");
@@ -140,6 +147,7 @@ void setup() {
     printAddress(sensors.getResolution(thermometer[i]));
     Serial.println();
   }*/
+  Serial.println("Sensors loaded");
 }
 
 void loop() {
@@ -148,7 +156,7 @@ void loop() {
     temperature[i] = sensors.getTempC(thermometer[i]);
   }
   now = rtc.now();
-
+  dataFile = SD.open(dataFileName, FILE_WRITE);
   for (int i = 0; i < TEMPERATURE_SENSOR_COUNT; i++) {
     Serial.print(i, DEC);
     Serial.print(" ");
@@ -156,10 +164,12 @@ void loop() {
     dataFile.print(temperature[i], DEC);
     dataFile.print("  ");
   }
-
-  dataFile.print(now.hour(), DEC);
+  dataFile.print(now.hour());
   dataFile.print(":");
-  dataFile.println(now.minute(), DEC);
+  dataFile.print(now.minute());
+  dataFile.print(":");
+  dataFile.print(now.second());
+  dataFile.println();
   dataFile.close();
   Serial.println("data stored");
 
@@ -177,12 +187,6 @@ void printAddress(DeviceAddress deviceAddress)
   }
 }
 
-/*void printGraph()
-{
-  for (int i = graphI; i < GRAPH_SIZE; i++) {
-    
-  }
-}*/
 
 
 
