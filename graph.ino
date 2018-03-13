@@ -1,3 +1,4 @@
+#define GRAPH_SIZE 128
 short graph[GRAPH_SIZE];
 byte graphI = 0;
 byte graphZoom = 4;

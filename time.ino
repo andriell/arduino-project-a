@@ -1,6 +1,21 @@
 int timeNew[6] = {2018, 6, 15, 12, 30, 0};
 byte timeNewI = 0;
 
+void timeSetup() {
+  lcdLog("RTC loading...");
+  if (!rtc.begin()) {
+    lcdLog("RTC Error");
+    while (1);
+  }
+  if (!rtc.isrunning()) {
+    Serial.println("RTC is NOT running!");
+    rtc.adjust(DateTime(2018, 1, 1, 0, 0, 0));
+    menuActive = 1;
+  }
+  lcdLog(timeStr());
+  lcdLog("RTC loaded");
+}
+
 void timeMenu() {
   oled.print(menuList[1], 5, 10);
   oled.print(timeStr(), 5, 24);
