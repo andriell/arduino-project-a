@@ -77,7 +77,7 @@ void setup() {
   Serial.begin(9600);
 
   // -- Начало загрузки LCD
-  lcd.begin();
+  lcd.init();
   lcd.backlight();
   lcd.clear();
   lcd.setCursor(0, 0);
