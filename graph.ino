@@ -3,7 +3,7 @@ short graph[GRAPH_SIZE];
 byte graphI = 0;
 byte graphZoom = 4;
 short graphMin = 2000;
-unsigned long graphTime;
+unsigned long graphTime = 0;
 
 void graphMenu() {
   // Начало график
@@ -87,16 +87,17 @@ void graphMenu() {
     graphMin -= graphMin % 100;
   }
   if (bitRead(jButtons, 14)) {
-    menuActive = 255;
+    menuOpen(255);
   }
   // -- Конец контроля
 }
 
 void graphPut(float t) {
-  if (graphTime + 60000 < millis()) {
+  unsigned long m = millis();
+  if (m - graphTime < 60000) {
     return;
   }
-  graphTime = millis();
+  graphTime = m;
   graphI++;
   if (graphI >= GRAPH_SIZE) {
     graphI = 0;

@@ -24,8 +24,6 @@ void lcdLog(String str) {
 void lcdTemperature(float* t, byte l) {
   for (byte i = 0; i < l; i++) {
     lcd.setCursor(0, i);
-    lcd.print("     ");
-    lcd.setCursor(0, i);
     lcd.print(t[i]);
   }
 }

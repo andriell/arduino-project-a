@@ -10,7 +10,7 @@ void timeSetup() {
   if (!rtc.isrunning()) {
     Serial.println("RTC is NOT running!");
     rtc.adjust(DateTime(2018, 1, 1, 0, 0, 0));
-    menuActive = 1;
+    menuOpen(1);
   }
   lcdLog(timeStr());
   lcdLog("RTC loaded");
@@ -86,7 +86,7 @@ void timeMenu() {
     if (timeNewI == 7) {
       rtc.adjust(DateTime(timeNew[0], timeNew[1], timeNew[2], timeNew[3], timeNew[4], timeNew[5]));
     } else {
-      menuActive = 255;
+      menuOpen(255);
     }
   }
 }

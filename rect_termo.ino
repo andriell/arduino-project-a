@@ -6,6 +6,7 @@
 #include <iarduino_OLED.h>
 #include <Wire.h>
 #include <Servo.h>
+#include <EEPROM.h>
 
 // -- Начало LCD Дисплей
 LiquidCrystal_I2C lcd(0x27, 20, 4);
@@ -39,7 +40,7 @@ unsigned int jButtons = 0;
 // -- Конец Джойстик
 
 // -- Начало меню
-byte menuActive = 255;
+
 // -- Конец меню
 
 void setup() {
@@ -59,19 +60,13 @@ void loop() {
 
   float* t = thermo();
   lcdTemperature(t, THERMO_SENSOR_COUNT);
-  
+  logThermo(t, THERMO_SENSOR_COUNT);
   graphPut(t[0]);
 
   control(3);
 
   oled.clrScr();
-  if (menuActive == 0) {
-    graphMenu();
-  } else if (menuActive == 1) {
-    timeMenu();
-  } else {
-    menu();
-  }
+  menuLoop();
   oled.update();
 }
 
