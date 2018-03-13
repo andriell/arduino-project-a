@@ -1,4 +1,4 @@
-void readControl(byte t) {
+void control(byte t) {
   int s;
   bool beep = false;
   for (byte i = 0; i < t; i++) {

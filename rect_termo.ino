@@ -104,7 +104,7 @@ void setup() {
     rtc.adjust(DateTime(2018, 1, 1, 0, 0, 0));
     menuActive = 1;
   }
-  lcdLog(getTime());
+  lcdLog(timeStr());
   lcdLog("RTC loaded");
   // -- Конец загрузки RTC
 
@@ -121,7 +121,6 @@ void setup() {
   lcdLog(logFileName);
   File logFile = SD.open(logFileName, FILE_WRITE);
   if (logFile) {
-    logFile.println(getTime());
     logFile.close();
   } else {
     lcdLog("File open Error");
@@ -148,20 +147,21 @@ void loop() {
   jButtons = 0;
 
   sensors.requestTemperatures();
-  float t = 0;
+  float t[TEMPERATURE_SENSOR_COUNT];
   for (byte i = 0; i < TEMPERATURE_SENSOR_COUNT; i++) {
-    t = sensors.getTempC(thermometer[i]);
-    lcdTemperature(i, t);
+    t[i] = sensors.getTempC(thermometer[i]);
   }
-  putTemp(t);
+  lcdTemperature(t, TEMPERATURE_SENSOR_COUNT);
+  
+  graphPut(t[0]);
 
-  readControl(3);
+  control(3);
 
   oled.clrScr();
   if (menuActive == 0) {
-    menuGraph();
+    graphMenu();
   } else if (menuActive == 1) {
-    menuTime();
+    timeMenu();
   } else {
     menu();
   }
