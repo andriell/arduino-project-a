@@ -17,7 +17,7 @@ void graphMenu() {
     }
     x += 16;
     y = map(graph[i], graphMin, graphMax, 63, 0);
-    oled.drawPixel(x, y, true);
+    oledPixel(x, y);
   }
   // Конец график
   // Начало сетка
@@ -44,19 +44,19 @@ void graphMenu() {
   for (; t < graphMax; t += dt) {
     for (byte i = 16; i < 128; i += 5) {
       y = map(t, graphMin, graphMax, 63, 0);
-      oled.drawPixel(i, y, true);
-      oled.print((t / 100) % 100, 0, y + 4);
+      oledPixel(i, y);
+      oledPrintInt((t / 100) % 100, 0, y + 4, 0);
     }
   }
   // Конец сетка
   // Начало текст
-  oled.drawRect(0, 0, 127, 9, true , false);
-  oled.print("t", 0, 7);
-  oled.print(((float) graph[graphI]) / 100, 6, 7);
-  oled.print("min", 50, 7);
-  oled.print(((float) graphMin) / 100, 69, 7);
-  oled.print("x", 105, 7);
-  oled.print(graphZoom, 111, 7);
+  //oled.drawRect(0, 0, 127, 9, true, false);
+  oledPrint("t", 0, 7, 0);
+  oledPrintFloat(((float) graph[graphI]) / 100, 6, 7, 0);
+  oledPrint("min", 50, 7, 0);
+  oledPrintFloat(((float) graphMin) / 100, 69, 7, 0);
+  oledPrint("x", 105, 7, 0);
+  oledPrintInt(graphZoom, 111, 7, 0);
   // Конец текст
 
   // -- Начало контроля

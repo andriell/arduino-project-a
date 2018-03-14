@@ -1,27 +1,28 @@
 const byte MENU_TOP = 14;
-const byte MENU_SIZE = 3;
+const byte MENU_SIZE = 4;
 char* menuList[] = {
   "График",
   "Дата/время",
   "Серво",
+  "Kалибровка",
 };
 byte menuSelected = 0;
 byte menuActive = 255;
 
 void menu() {
-  oled.print("Меню", 5, 10);
+  oledPrint("Меню", 5, 10, 0);
   if (MENU_SIZE <= 5) {
     for (byte i = 0; i < MENU_SIZE; i++) {
       if (menuSelected == i) {
-        oled.print(">", 5, 10 * (i + 1) + MENU_TOP);
+        oledPrint(">", 5, 10 * (i + 1) + MENU_TOP, 0);
       }
-      oled.print(menuList[i], 10, 10 * (i + 1) + MENU_TOP);
+      oledPrint(menuList[i], 10, 10 * (i + 1) + MENU_TOP, 0);
     }
   } else {
-    oled.print(">", 5, 30 + MENU_TOP);
+    oledPrint(">", 5, 30 + MENU_TOP, 0);
     for (byte i = 0; i < MENU_SIZE; i++) {
       byte j = nextCycleValue(0, MENU_SIZE - 1, i + menuSelected - 2);
-      oled.print(menuList[j], 10, 10 * (i + 1) + MENU_TOP);
+      oledPrint(menuList[j], 10, 10 * (i + 1) + MENU_TOP, 0);
     }
   }
   // Контроль
@@ -45,6 +46,10 @@ void menu() {
 
 void menuOpen(byte i) {
   menuActive = 255;
+}
+
+void menuTitle(byte i) {
+  oledPrint(menuList[i], 5, 10, 0);
 }
 
 void menuLoop() {

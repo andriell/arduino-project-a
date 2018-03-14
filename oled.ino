@@ -1,13 +1,56 @@
+iarduino_OLED oled(0x3C);
+// ширина символов (6), высота символов (8),
 extern uint8_t SmallFontRus[];
+// ширина символов (12), высота символов (16)
+extern uint8_t MediumFontRus[];
 
 void oledSetap() {
   lcdLog("OLED loading...");
-  oled.begin();           // Инициируем работу с дисплеем.
-  oled.setFont(SmallFontRus);
-  oled.autoUpdate(false); // Запрещаем автоматический вывод данных. Информация на дисплее будет обновляться только после обращения к функции update().
-  oled.clrScr();
-  oled.print("OLED", 0, 7);
-  oled.update();
+  oled.begin();
+  oledClean();
+  oled.autoUpdate(false);
+  oledPrint("OLED", 40, 40, 1);
+  oledUpdate();
   lcdLog("OLEDed loaded");
 }
+
+void oledFont(byte fs) {
+  if (fs == 0) {
+    oled.setFont(SmallFontRus);
+  } else if (fs == 1) {
+    oled.setFont(MediumFontRus);
+  }
+}
+
+void oledClean() {
+  oled.clrScr();
+}
+
+void oledUpdate() {
+  oled.clrScr();
+}
+void oledPixel(int x, int y) {
+  oled.drawPixel(x, y, true);
+}
+
+void oledPrint(String txt, int x, int y, byte fs) {
+  oledFont(fs);
+  oled.print(txt, x, y);
+}
+
+void oledPrintByte(byte txt, int x, int y, byte fs) {
+  oledFont(fs);
+  oled.print(txt, x, y);
+}
+
+void oledPrintInt(int txt, int x, int y, byte fs) {
+  oledFont(fs);
+  oled.print(txt, x, y);
+}
+
+void oledPrintFloat(float txt, int x, int y, byte fs) {
+  oledFont(fs);
+  oled.print(txt, x, y);
+}
+
 

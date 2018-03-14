@@ -20,15 +20,8 @@ RTC_DS1307 rtc;
 char logFileName[13];
 // -- Конец SD
 
-// -- Начало OLED Дисплей
-iarduino_OLED oled(0x3C);
-// -- Конец OLED Дисплей
-
 // -- Начало температуры
 #define THERMO_SENSOR_COUNT 4
-#define THERMO_PIN 8
-OneWire oneWire(THERMO_PIN);
-DallasTemperature sensors(&oneWire);
 // -- Конец температуры
 
 // -- Начало Servo
@@ -65,8 +58,8 @@ void loop() {
 
   control(3);
 
-  oled.clrScr();
+  oledClean();
   menuLoop();
-  oled.update();
+  oledUpdate();
 }
 

@@ -30,13 +30,13 @@ void servoWrite(int angle) {
 
 void servoMenu() {
   servoActive = false;
-  oled.print(menuList[2], 5, 10);
-  
-  oled.print("-1", 52, 32);
-  oled.print("-10", 22, 47);
-  oled.print(servoAngle, 52, 47);
-  oled.print("+10", 72, 47);
-  oled.print("+1", 52, 62);
+  menuTitle(2);
+
+  oledPrint("-1", 58, 15, 0);
+  oledPrint("-10", 14, 43, 0);
+  oledPrintInt(servoAngle, 40, 47, 1);
+  oledPrint("+10", 114, 43, 0);
+  oledPrint("+1", 58, 63, 0);
   
   servoWrite(servoAngle);
   

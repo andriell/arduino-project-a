@@ -17,14 +17,14 @@ void timeSetup() {
 }
 
 void timeMenu() {
-  oled.print(menuList[1], 5, 10);
-  oled.print(timeStr(), 5, 24);
+  menuTitle(1);
+  oledPrint(timeStr(), 5, 24, 0);
 
   char timeNewStr[19];
   sprintf(timeNewStr, "%04d-%02d-%02d %02d:%02d:%02d", timeNew[0], timeNew[1], timeNew[2], timeNew[3], timeNew[4], timeNew[5]);
   timeNewStr[19] = '\0';
 
-  oled.print(timeNewStr, 5, 34);
+  oledPrint(timeNewStr, 5, 34, 0);
 
   char* timeNewName[] = {
     "Год",
@@ -36,8 +36,7 @@ void timeMenu() {
     "Сохранить",
     "Выход",
   };
-
-  oled.print(timeNewName[timeNewI], 5, 44);
+  oledPrint(timeNewName[timeNewI], 5, 44, 0);
 
   if (bitRead(jButtons, 10)) {
     if (timeNewI < 6) {
