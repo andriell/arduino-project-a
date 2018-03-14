@@ -65,10 +65,10 @@ void servoMenu() {
   servoActive = false;
   menuTitle(2);
 
-  oledPrint("-1", 58, 15, 0);
+  oledPrint("-1", 58, 23, 0);
   oledPrint("-10", 14, 43, 0);
-  oledPrintInt(servoAngle, 40, 47, 1);
-  oledPrint("+10", 114, 43, 0);
+  oledPrintInt(servoAngle, 46, 47, 1);
+  oledPrint("+10", 96, 43, 0);
   oledPrint("+1", 58, 63, 0);
 
   servoWrite(servoAngle);
