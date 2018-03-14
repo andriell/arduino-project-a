@@ -87,6 +87,7 @@ int cfgCoolingTime() {
 
 byte cfgMenuI = 0;
 void cfgMenu() {
+  menuTitle(4);
   int valInt = cfgRead(cfgMenuI);
   CfgMenuStruct current = cfgMenuElements[cfgMenuI];
   float val = ((float) valInt) / current.vDivider;
