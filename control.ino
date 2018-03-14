@@ -24,27 +24,34 @@ void control(byte t) {
   int s;
   bool beep = false;
   for (byte i = 0; i < t; i++) {
+    if (i > 0) {
+      delay(100);
+    }
     s = analogRead(J_X_PIN);
     if (s < 256) {
       bitSet(jButtons, 12);
       beep = true;
+      break;
     } else if (s > 768) {
       bitSet(jButtons, 10);
       beep = true;
+      break;
     }
     s = analogRead(J_Y_PIN);
     if (s < 256) {
       bitSet(jButtons, 13);
       beep = true;
+      break;
     } else if (s > 768) {
       bitSet(jButtons, 11);
       beep = true;
+      break;
     }
     if (digitalRead(J_B_PIN) == LOW) {
       bitSet(jButtons, 14);
       beep = true;
+      break;
     }
-    delay(100);
   }
   if (beep) {
     tone(BUZZER_PIN, 2000, 100);

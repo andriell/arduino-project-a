@@ -1,51 +1,41 @@
 const byte MENU_TOP = 14;
-const byte MENU_SIZE = 4;
+const byte MENU_SIZE = 5;
 char* menuList[] = {
   "График",
   "Дата/время",
   "Серво",
   "Kалибровка",
+  "Настройки",
 };
-byte menuSelected = 0;
+byte menuSelected[3] = {0, 1, 2};
 byte menuActive = 255;
 
 void menu() {
   oledPrint("Меню", 5, 10, 0);
-  if (MENU_SIZE <= 5) {
-    for (byte i = 0; i < MENU_SIZE; i++) {
-      if (menuSelected == i) {
-        oledPrint(">", 5, 10 * (i + 1) + MENU_TOP, 0);
-      }
-      oledPrint(menuList[i], 10, 10 * (i + 1) + MENU_TOP, 0);
-    }
-  } else {
-    oledPrint(">", 5, 30 + MENU_TOP, 0);
-    for (byte i = 0; i < MENU_SIZE; i++) {
-      byte j = nextCycleValue(0, MENU_SIZE - 1, i + menuSelected - 2);
-      oledPrint(menuList[j], 10, 10 * (i + 1) + MENU_TOP, 0);
-    }
-  }
+
+  oledPrint(menuList[menuSelected[0]], 10, 27, 0);
+  oledPrint(menuList[menuSelected[1]], 0,  47, 1);
+  oledPrint(menuList[menuSelected[2]], 10, 59, 0);
+  
   // Контроль
   if (bitRead(jButtons, 10)) {
-    if (menuSelected <= 0) {
-      menuSelected = MENU_SIZE - 1;
-    } else {
-      menuSelected--;
-    }
+    menuSelected[1]--;
   }
   if (bitRead(jButtons, 12)) {
-    menuSelected++;
-    if (menuSelected > MENU_SIZE - 1) {
-      menuSelected = 0;
-    }
+    menuSelected[1]++;
+  }
+  if (bitRead(jButtons, 10) || bitRead(jButtons, 12)) {
+    menuSelected[0] = nextCycleValue(0, MENU_SIZE, menuSelected[1] - 1);
+    menuSelected[1] = nextCycleValue(0, MENU_SIZE, menuSelected[1]);
+    menuSelected[2] = nextCycleValue(0, MENU_SIZE, menuSelected[1] + 1);
   }
   if (bitRead(jButtons, 14)) {
-    menuActive = menuSelected;
+    menuActive = menuSelected[1];
   }
 }
 
 void menuOpen(byte i) {
-  menuActive = 255;
+  menuActive = i;
 }
 
 void menuTitle(byte i) {
@@ -59,12 +49,16 @@ void menuLoop() {
     timeMenu();
   } else if (menuActive == 2) {
     servoMenu();
+  } else if (menuActive == 3) {
+    calibrationMenu();
+  } else if (menuActive == 4) {
+    cfgMenu();
   } else {
     menu();
   }
 }
 
-char nextCycleValue(char minV, char maxV, char i) {
+char nextCycleValue(byte minV, byte maxV, byte i) {
   while (i > (minV - maxV)) {
     i -= (maxV - minV) + 1;
   }

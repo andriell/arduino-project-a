@@ -50,16 +50,23 @@ void setup() {
 
 void loop() {
   jButtons = 0;
-
+  
   float* t = thermo();
-  lcdTemperature(t, THERMO_SENSOR_COUNT);
-  logThermo(t, THERMO_SENSOR_COUNT);
   graphPut(t[0]);
-
-  control(3);
+  control(1);
+  
+  calibrationLoop(t, THERMO_SENSOR_COUNT);
+  control(1);
+  
+  lcdTemperature(t, THERMO_SENSOR_COUNT);
+  control(1);
+  
+  logThermo(t, THERMO_SENSOR_COUNT);
+  control(1);
 
   oledClean();
   menuLoop();
   oledUpdate();
+  control(3);
 }
 

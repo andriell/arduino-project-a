@@ -9,7 +9,7 @@ void logSetup() {
     while (1);
   }
   DateTime now = rtc.now();
-  sprintf(logFileName, "%04d%02d%02d.txt", now.year(), now.month(), now.day());
+  sprintf(logFileName, "%04d%02d%02d.csv", now.year(), now.month(), now.day());
   logFileName[12] = '\0';
   lcdLog(logFileName);
   File logFile = SD.open(logFileName, FILE_WRITE);
