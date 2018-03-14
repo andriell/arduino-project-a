@@ -1,5 +1,3 @@
-const byte CFG_MENU_ELEMENTS_SIZE = 11;
-
 struct CfgMenuStruct {
   String vName;
   int vMax;
@@ -7,28 +5,98 @@ struct CfgMenuStruct {
   int vDivider;
   int vStep;
 };
+
+const byte CFG_MENU_ELEMENTS_SIZE = 13;
 CfgMenuStruct cfgMenuElements[] = {
-  {"Температура отбора (C°)", 70, 100, 10, 1},
-  {"Температура отбора дельта (C°)", 0, 50, 10, 1},
-  {"Серво задержка сек.", 5, 900, 1, 1},
-  {"Серво max °", 0, 180, 1, 1},
-  {"Серво min °", 0, 180, 1, 1},
-  {"ОЖ Max", 30, 60, 1, 1},
+  {"Температура отбора (C°)", 700, 1000, 10, 1},
+  {"Температура отбора дельта (C°)", 0, 500, 10, 1},
+  {"Температура начала отбора голов (C°)", 0, 1000, 10, 1},
+  {"Температура начала отбора хвостов (C°)", 0, 1000, 10, 1},
+  {"Температура завершения отбора хвостов (C°)", 0, 1000, 10, 1},
   {"Отбор голов мин.", 0, 100, 1, 1},
-  {"Тон пищалки", 100, 20000, 1, 100},
+  {"Серво min угол", 0, 180, 1, 1},
+  {"Серво max угол", 0, 180, 1, 1},
+  {"Серво задержка сек.", 5, 900, 1, 1},
+  {"ОЖ Max", 30, 60, 1, 1},
+  {"Тон кнопок", 0, 2000, 1, 100},
   {"ИЭН всего позиций", 0, 100, 1, 1},
   {"ИЭН позиция отбора", 1, 100, 1, 1},
+  {"Интервал логирования сек.", 10, 600, 1, 1},
   {"Время остывания мин.", 5, 60, 1, 1},
 };
 
-byte cfgMenuI = 0;
+float cfgT0() {
+  return cfgReadFloat(0);
+}
 
+float cfgT0Delta() {
+  return cfgReadFloat(1);
+}
+
+float cfgTHeadStart() {
+  return cfgReadFloat(2);
+}
+
+float cfgTTailStart() {
+  return cfgReadFloat(3);
+}
+
+float cfgTTailStop() {
+  return cfgReadFloat(4);
+}
+
+int cfgTHeadTime() {
+  return cfgRead(5);
+}
+
+int cfgServoMin() {
+  return cfgRead(6);
+}
+
+int cfgServoMax() {
+  return cfgRead(7);
+}
+
+int cfgServoTime() {
+  return cfgRead(8);
+}
+
+float cfgOzMax() {
+  return cfgReadFloat(9);
+}
+
+int cfgBuzzer() {
+  return cfgRead(10);
+}
+
+int cfgCookStepAll() {
+  return cfgRead(11);
+}
+
+int cfgCookStepGood() {
+  return cfgRead(12);
+}
+
+int cfgLogTime() {
+  return cfgRead(13);
+}
+
+int cfgCoolingTime() {
+  return cfgRead(14);
+}
+
+byte cfgMenuI = 0;
 void cfgMenu() {
   int valInt = cfgRead(cfgMenuI);
   float val = ((float) valInt) / cfgMenuElements[cfgMenuI].vDivider;
   oledPrintFloat(val, 28, 30, 1);
-  oledPrint(cfgMenuElements[cfgMenuI].vName, 2, 40, 0);
 
+  String vName = cfgMenuElements[cfgMenuI].vName;
+  unsigned int nameLen = vName.length();
+  for (int i = 0; i <= nameLen % 21; i++) {
+    oledPrint(vName.substring(i * 21, min((i + 1) * 21, nameLen)), 1, 40 + i * 10, 0);
+  }
+  
   // Контроль
   if (bitRead(jButtons, 10)) {
     valInt += cfgMenuElements[cfgMenuI].vStep;
@@ -68,11 +136,28 @@ int cfgRead(byte addr) {
   raw[0] = EEPROM.read(addr);
   raw[1] = EEPROM.read(addr + 1);
   int &num = (int&) raw;
+  if (num < cfgMenuElements[addr].vMin) {
+    return cfgMenuElements[addr].vMin;
+  }
+  if (num > cfgMenuElements[addr].vMax) {
+    return cfgMenuElements[addr].vMax;
+  }
   return num;
+}
+
+int cfgReadFloat(byte addr) {
+  return ((float) cfgRead(addr)) / cfgMenuElements[addr].vDivider;
 }
 
 // запись
 void cfgWrite(byte addr, int num) {
+  if (num < cfgMenuElements[addr].vMin) {
+    num = cfgMenuElements[addr].vMin;
+  }
+  if (num > cfgMenuElements[addr].vMax) {
+    num = cfgMenuElements[addr].vMax;
+  }
+  
   addr *= 2;
   byte raw[2];
   (int&) raw = num;

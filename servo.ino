@@ -3,13 +3,46 @@
 boolean servoActive = true;
 int servoPrevious = 90;
 int servoAngle = 90;
+unsigned long servoTime = 0;
 
 void servoSetup() {
   lcdLog("Servo 180");
-  servoWrite(180);
+  servoAdd(180);
   lcdLog("Servo 0");
-  servoWrite(0);
+  servoAdd(-180);
   lcdLog("Servo Ok");
+}
+
+// Установка угла серво для внешних систем
+// Угл устанавливается относительно текущего положения
+// Если это допустимый угл, то возвращает true
+boolean servoAdd(int a) {
+  unsigned long waitTime = (unsigned long) cfgServoTime() * 60000;
+  if (millis() - servoTime < waitTime) {
+     return true;
+  }
+  boolean r = true;
+  int vMin = cfgServoMin();
+  int vMax = cfgServoMax();
+  servoAngle += a;
+  if (servoAngle < vMin) {
+    servoAngle = vMin;
+    r = false;
+  }
+  if (servoAngle < 0) {
+    servoAngle = 0;
+    r = false;
+  }
+  if (servoAngle > vMax) {
+    servoAngle = vMax;
+    r = false;
+  }
+  if (servoAngle > 180) {
+    servoAngle = 180;
+    r = false;
+  }
+  servoWrite(servoAngle);
+  return r;
 }
 
 void servoWrite(int angle) {
@@ -69,3 +102,4 @@ void servoMenu() {
     menuOpen(255);
   }
 }
+

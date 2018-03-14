@@ -54,6 +54,17 @@ void control(byte t) {
     }
   }
   if (beep) {
-    tone(BUZZER_PIN, 2000, 100);
+    int vTone = cfgBuzzer();
+    if (vTone > 0) {
+      tone(BUZZER_PIN, vTone, 100);
+    }
   }
 }
+
+void controlBeep(byte n) {
+  for (byte i = 0; i < n; i++) {
+    tone(BUZZER_PIN, 2000, 100);
+    delay(200);
+  }
+}
+
