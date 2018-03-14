@@ -19,7 +19,7 @@ void servoSetup() {
 boolean servoAdd(int a) {
   unsigned long waitTime = (unsigned long) cfgServoTime() * 60000;
   if (millis() - servoTime < waitTime) {
-     return true;
+    return true;
   }
   boolean r = true;
   int vMin = cfgServoMin();
@@ -70,9 +70,9 @@ void servoMenu() {
   oledPrintInt(servoAngle, 40, 47, 1);
   oledPrint("+10", 114, 43, 0);
   oledPrint("+1", 58, 63, 0);
-  
+
   servoWrite(servoAngle);
-  
+
   if (bitRead(jButtons, 10)) {
     servoAngle++;
     if (servoAngle > 180) {
