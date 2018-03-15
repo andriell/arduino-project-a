@@ -23,6 +23,24 @@ void prog1Menu() {
   menuTitle(5);
   oledPrint("\235\342\240\257", 28, 30, 1);
   oledPrintNl(prog1[prog1MenuStepI], 40);
+
+  // Контроль
+  if (bitRead(jButtons, 10)) {
+    if (prog1MenuStepI <= 0) {
+      prog1MenuStepI = PROG1_MAX_STEP;
+    }
+    prog1MenuStepI--;
+  }
+  if (bitRead(jButtons, 12)) {
+    prog1MenuStepI++;
+    if (prog1MenuStepI >= PROG1_MAX_STEP - 1) {
+      prog1MenuStepI = 0;
+    }
+  }
+  if (bitRead(jButtons, 14)) {
+    prog1StepI = prog1MenuStepI;
+    menuOpen(255);
+  }
 }
 
 void prog1Loop(float t0, float tTank, float tCooler, float tOz) {

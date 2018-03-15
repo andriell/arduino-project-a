@@ -67,6 +67,8 @@ void menuLoop() {
     calibrationMenu();
   } else if (menuActive == 4) {
     cfgMenu();
+  } else if (menuActive == 5) {
+    prog1Menu();
   } else {
     menu();
   }
