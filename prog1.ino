@@ -21,7 +21,7 @@ char* prog1[] = {
 
 void prog1Menu() {
   menuTitle(5);
-  oledPrintFloat("Этап", 28, 30, 1);
+  oledPrint("\235\342\240\257", 28, 30, 1);
   oledPrintNl(prog1[prog1MenuStepI], 40);
 }
 
@@ -40,7 +40,7 @@ void prog1Loop(float t0, float tTank, float tCooler, float tOz) {
   lcd.print("TO");
   lcd.setCursor(2, 3);
   lcd.print(t0);
-  
+
   lcd.setCursor(3, 0);
   lcd.print("TT");
   lcd.setCursor(3, 3);

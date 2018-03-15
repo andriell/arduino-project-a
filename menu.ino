@@ -8,30 +8,43 @@ char* menuList[] = {
   "\215\240\341\342\340\256\251\252\250",
   "\220\245\252\342\250\344\250\252\240\346\250\357",
 };
-byte menuSelected[3] = {0, 1, 2};
+byte menuSelected = 0;
 byte menuActive = 255;
 
 void menu() {
   oledPrint("\214\245\255\356", 5, 10, 0);
 
-  oledPrint(menuList[menuSelected[0]], 10, 27, 0);
-  oledPrint(menuList[menuSelected[1]], 0,  47, 1);
-  oledPrint(menuList[menuSelected[2]], 10, 59, 0);
+  byte prev, next;
+  if (menuSelected <= 0) {
+    prev = MENU_SIZE - 1;
+    next = menuSelected + 1;
+  } else if (menuSelected >= MENU_SIZE - 1) {
+    prev = menuSelected - 1;
+    next = 0;
+  } else {
+    prev = menuSelected - 1;
+    next = menuSelected + 1;
+  }
+
+  oledPrint(menuList[prev], 10, 27, 0);
+  oledPrint(menuList[menuSelected], 0,  47, 1);
+  oledPrint(menuList[next], 10, 59, 0);
   
   // Контроль
   if (bitRead(jButtons, 10)) {
-    menuSelected[1]--;
+    if (menuSelected <= 0) {
+      menuSelected = MENU_SIZE;
+    }
+    menuSelected--;
   }
   if (bitRead(jButtons, 12)) {
-    menuSelected[1]++;
-  }
-  if (bitRead(jButtons, 10) || bitRead(jButtons, 12)) {
-    menuSelected[0] = nextCycleValue(0, MENU_SIZE, menuSelected[1] - 1);
-    menuSelected[1] = nextCycleValue(0, MENU_SIZE, menuSelected[1]);
-    menuSelected[2] = nextCycleValue(0, MENU_SIZE, menuSelected[1] + 1);
+    menuSelected++;
+    if (menuSelected >= MENU_SIZE - 1) {
+      menuSelected = 0;
+    }
   }
   if (bitRead(jButtons, 14)) {
-    menuActive = menuSelected[1];
+    menuActive = menuSelected;
   }
 }
 
