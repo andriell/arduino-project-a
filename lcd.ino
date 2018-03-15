@@ -1,4 +1,4 @@
-byte lcdLogI = 0;
+String lcdLogArray[4] = {" ", " ", " ", " "};
 
 struct lcdCharStruct {
   byte n;
@@ -826,14 +826,17 @@ void lcdSetup() {
 
 void lcdLog(String str) {
   Serial.println(str);
-  lcdLogI++;
-  if (lcdLogI >= 4) {
-    lcdLogI = 0;
+  for (byte i = 0; i < 4; i++) {
+    if (i <= 3) {
+      lcdLogArray[i] = lcdLogArray[i + 1];
+    } else {
+      lcdLogArray[i] = str;
+    }
+    lcd.setCursor(0, i);
+    lcd.print("                    ");
+    lcd.setCursor(0, i);
+    lcd.print(lcdLogArray[i]);
   }
-  lcd.setCursor(0, lcdLogI);
-  lcd.print("                    ");
-  lcd.setCursor(0, lcdLogI);
-  lcd.print(str);
   delay(1000);
 }
 

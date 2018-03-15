@@ -17,8 +17,10 @@ void servoSetup() {
 // Угл устанавливается относительно текущего положения
 // Если это допустимый угл, то возвращает true
 boolean servoAdd(int a) {
-  unsigned long waitTime = (unsigned long) cfgServoTime() * 60000;
-  if (millis() - servoTime < waitTime) {
+  if (!servoActive) {
+    return true;
+  }
+  if (millis() - servoTime < ((unsigned long) cfgServoTime()) * 60000) {
     return true;
   }
   boolean r = true;

@@ -92,15 +92,13 @@ int cfgCoolingTime() {
 
 byte cfgMenuI = 0;
 void cfgMenu() {
+  menuTitle(4);
   int valInt = cfgRead(cfgMenuI);
   float val = ((float) valInt) / cfgMenuElements[cfgMenuI].vDivider;
   oledPrintFloat(val, 28, 30, 1);
 
   String vName = cfgMenuElements[cfgMenuI].vName;
-  unsigned int nameLen = vName.length();
-  for (int i = 0; i <= nameLen % 21; i++) {
-    oledPrint(vName.substring(i * 21, min((i + 1) * 21, nameLen)), 1, 40 + i * 10, 0);
-  }
+  oledPrintNl(vName, 40);
   
   // Контроль
   if (bitRead(jButtons, 10)) {

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Font</title>
 </head>
 <body>
 <div id="out" style="white-space: pre; font-family: monospace;"></div>
@@ -76,24 +76,21 @@
         241: [0x38, 0x55, 0x54, 0x55, 0x18, 'ё'],
         248: [0x00, 0x06, 0x09, 0x09, 0x06, '°']
     };
-    var getBite = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80];
+    var oneBite = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80];
     var str = '';
     for (var i in charBin) {
         var bin = charBin[i];
         str += '  { ' + i + ", // " + bin[5] + "\n    {\n";
-        for (var y in getBite) {
-            var bite = getBite[y];
+        for (var y in oneBite) {
             str += '      0b';
             for (var x = 0; x < 6; x++) {
-                var b = bin[x];
-                var r = (b & bite);
-                str += r > 0 ? '1' : '0';
+                str += (bin[x] & oneBite[y]) > 0 ? '1' : '0';
             }
             str += ",\n";
         }
         str += "    }\n  },\n";
     }
-    $('#out').html(str);
+    document.getElementById("out").innerHTML = str;
 </script>
 </body>
 </html>

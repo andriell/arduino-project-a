@@ -44,6 +44,15 @@ void oledPrint(String txt, int x, int y, byte fs) {
   oled.print(txt, x, y);
 }
 
+byte oledPrintNl(String txt, int y) {
+  byte len = txt.length();
+  byte i = 0;
+  for (; i <= len % 21; i++) {
+    oledPrint(txt.substring(i * 21, min((i + 1) * 21, len)), 1, y, 0);
+  }
+  return i;
+}
+
 void oledPrintByte(byte txt, int x, int y, byte fs) {
   oledFont(fs);
   oled.print(txt, x, y);
