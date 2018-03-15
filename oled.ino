@@ -3,13 +3,14 @@ iarduino_OLED oled(0x3C);
 extern uint8_t SmallFontRus[];
 // ширина символов (12), высота символов (16)
 extern uint8_t MediumFontRus[];
-byte oledFSPrev = 255;
+byte oledFSPrev = 0;
 
 void oledSetap() {
   lcdLog("OLED loading...");
   oled.begin();
-  oledClean();
+  oled.setCoding(false);
   oled.autoUpdate(false);
+  oledClean();
   oledPrint("OLED", 40, 40, 1);
   oledUpdate();
   lcdLog("OLEDed loaded");
@@ -32,7 +33,7 @@ void oledClean() {
 }
 
 void oledUpdate() {
-  oled.update();
+  oled.clrScr();
 }
 void oledPixel(int x, int y) {
   oled.drawPixel(x, y, true);

@@ -4,9 +4,9 @@ int calibrationT0Prev = 0;
 
 void calibrationMenu() {
   menuTitle(3);
-  oledPrint("Да", 40, 30, 1);
-  oledPrint("Нет", 40, 50, 1);
-  oledPrint(">", 28, calibrationActive ? 30 : 50, 1);
+  oledPrint("\204\240", 60, 29, 1);
+  oledPrint("\215\245\342", 60, 37, 1);
+  oledPrint(">", 60, calibrationActive ? 29 : 37, 1);
   if (bitRead(jButtons, 10)) {
     calibrationActive = !calibrationActive;
   }
