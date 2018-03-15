@@ -6,10 +6,11 @@ struct CfgMenuStruct {
   int vStep;
 };
 
-const byte CFG_MENU_ELEMENTS_SIZE = 13;
+const byte CFG_MENU_ELEMENTS_SIZE = 16;
 CfgMenuStruct cfgMenuElements[] = {
   {"\222\245\254\257\245\340\240\342\343\340\240 \256\342\241\256\340\240 (C\370)", 700, 1000, 10, 1},
   {"\222\245\254\257\245\340\240\342\343\340\240 \256\342\241\256\340\240 \244\245\253\354\342\240 (C\370)", 0, 500, 10, 1},
+  {"\214\250\255\250\254\240\253\354\255\256\245 \242\340\245\254\357 \256\342\241\256\340\240 \342\245\253\240 \254\250\255.", 10, 300, 1, 1},
   {"\222\245\254\257\245\340\240\342\343\340\240 \255\240\347\240\253\240 \256\342\241\256\340\240 \243\256\253\256\242 (C\370)", 0, 1000, 10, 1},
   {"\222\245\254\257\245\340\240\342\343\340\240 \255\240\347\240\253\240 \256\342\241\256\340\240 \345\242\256\341\342\256\242 (C\370)", 0, 1000, 10, 1},
   {"\222\245\254\257\245\340\240\342\343\340\240 \247\240\242\245\340\350\245\255\250\357 \256\342\241\256\340\240 \345\242\256\341\342\256\242 (C\370)", 0, 1000, 10, 1},
@@ -33,56 +34,60 @@ float cfgT0Delta() {
   return cfgReadFloat(1);
 }
 
-float cfgTHeadStart() {
-  return cfgReadFloat(2);
+int cfgT0MinTime() {
+  return cfgRead(2);
 }
 
-float cfgTTailStart() {
+float cfgTHeadStart() {
   return cfgReadFloat(3);
 }
 
-float cfgTTailStop() {
+float cfgTTailStart() {
   return cfgReadFloat(4);
 }
 
-int cfgTHeadTime() {
-  return cfgRead(5);
+float cfgTTailStop() {
+  return cfgReadFloat(5);
 }
 
-int cfgServoMin() {
+int cfgTHeadTime() {
   return cfgRead(6);
 }
 
-int cfgServoMax() {
+int cfgServoMin() {
   return cfgRead(7);
 }
 
-int cfgServoTime() {
+int cfgServoMax() {
   return cfgRead(8);
 }
 
+int cfgServoTime() {
+  return cfgRead(9);
+}
+
 float cfgOzMax() {
-  return cfgReadFloat(9);
+  return cfgReadFloat(10);
 }
 
 int cfgBuzzer() {
-  return cfgRead(10);
-}
-
-int cfgCookStepAll() {
   return cfgRead(11);
 }
 
-int cfgCookStepGood() {
+int cfgCookStepAll() {
   return cfgRead(12);
 }
 
-int cfgLogTime() {
+int cfgCookStepGood() {
   return cfgRead(13);
 }
 
-int cfgCoolingTime() {
+int cfgLogTime() {
   return cfgRead(14);
+}
+
+int cfgCoolingTime() {
+  return cfgRead(15);
 }
 
 byte cfgMenuI = 0;
