@@ -57,8 +57,8 @@ void loop() {
   
   calibrationLoop(t, THERMO_SENSOR_COUNT);
   control(1);
-  
-  lcdTemperature(t, THERMO_SENSOR_COUNT);
+
+  prog1Loop(t[0], t[1], t[2], t[3]);
   control(1);
   
   logThermo(t, THERMO_SENSOR_COUNT);
