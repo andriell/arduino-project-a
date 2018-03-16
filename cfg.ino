@@ -98,11 +98,7 @@ void cfgMenu() {
   float val = ((float) valInt) / current.vDivider;
   oledPrintFloat(val, 28, 30, 1);
 
-  String vName = current.vName;
-  unsigned int nameLen = vName.length();
-  for (int i = 0; i <= nameLen % 21; i++) {
-    oledPrint(vName.substring(i * 21, min((i + 1) * 21, nameLen)), 1, 40 + i * 10, 0);
-  }
+  oledPrintNl(current.vName, 40);
   
   // Контроль
   if (bitRead(jButtons, 10)) {
@@ -141,7 +137,7 @@ int cfgRead(byte addr) {
   return val;
 }
 
-int cfgReadFloat(byte addr) {
+float cfgReadFloat(byte addr) {
   return ((float) cfgRead(addr)) / cfgMenuElements[addr].vDivider;
 }
 
