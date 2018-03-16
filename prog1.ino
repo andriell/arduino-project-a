@@ -51,8 +51,6 @@ void prog1Loop(float t0, float tTank, float tCooler, float tOz) {
 
   lcdClear(0);
   lcdClear(1);
-  lcdClear(2);
-  lcdClear(3);
 
   lcdPrint(0, 0, prog1[prog1StepI]);
 
@@ -93,23 +91,19 @@ void prog1Loop(float t0, float tTank, float tCooler, float tOz) {
     prog1Step(7);
   }
 
-  byte x = 1;
-  x = lcdPrint(x, 2, "TO");
-  x++;
+  byte x = 0;
+  x = lcdPrint(x, 2, " TO ");
   x = lcdPrintFloat(x, 2, t0);
-  x += 2;
-  x = lcdPrint(x, 2, "TC");
-  x++;
+  x = lcdPrint(x, 2, "  TC ");
   x = lcdPrintFloat(x, 2, tCooler);
+  x = lcdPrint(x, 2, " ");
 
-  x = 1;
-  x = lcdPrint(x, 3, "TT");
-  x++;
+  x = 0;
+  x = lcdPrint(x, 3, " TT ");
   x = lcdPrintFloat(x, 3, tTank);
-  x += 2;
-  x = lcdPrint(x, 3, "OZ");
-  x++;
+  x = lcdPrint(x, 3, "  OZ ");
   x = lcdPrintFloat(x, 3, tOz);
+  x = lcdPrint(x, 3, " ");
 }
 
 void prog1Step(byte i) {
@@ -129,11 +123,8 @@ void prog1Step1() {
 // Разогрев
 void prog1Step2(float t0) {
   byte x = 0;
-  x = lcdPrint(x, 1, "T START");
-  x++;
+  x = lcdPrint(x, 1, "T0MIN ");
   x = lcdPrintInt(x, 1, (int) cfgTHeadStart());
-  x = lcdPrint(x, 1, "/");
-  x = lcdPrintFloat(x, 1, t0);
   if (t0 > cfgTHeadStart()) {
     compressorOn(); // Включаем компрессор
     cookGood(); // Выставляем температуру на плите
@@ -143,10 +134,9 @@ void prog1Step2(float t0) {
 
 // Отбор голов
 void prog1Step3() {
-  int ost = cfgTTailStart() * 60 - ((millis() - prog1StepStartTime) / 1000);
+  int ost = cfgTHeadTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
   byte x = 0;
-  x = lcdPrint(x, 1, "OST");
-  x++;
+  x = lcdPrint(x, 1, "OST ");
   x = lcdPrintInt(x, 1, ost);
   if (ost <= 0) {
     prog1Step(4);
@@ -157,8 +147,7 @@ void prog1Step3() {
 void prog1Step4(float t0) {
   float t0Normal = cfgT0();
   byte x = 0;
-  x = lcdPrint(x, 1, "T0N");
-  x++;
+  x = lcdPrint(x, 1, "T0N ");
   x = lcdPrintFloat(x, 1, t0Normal);
   if (t0 > t0Normal) {
     prog1Step(5);
@@ -171,26 +160,23 @@ void prog1Step5(float t0) {
   float t0Delta = cfgT0Delta();
   int ost = cfgT0MinTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
   byte x = 0;
-  x = lcdPrint(x, 1, "T0N");
-  x++;
+  x = lcdPrint(x, 1, "T0N ");
   x = lcdPrintFloat(x, 1, t0Normal);
-  x = lcdPrint(x, 1, "+-");
+  x--;
+  x = lcdPrint(x, 1, "~");
   x = lcdPrintFloat(x, 1, t0Delta);
-  x++;
-  x = lcdPrint(x, 1, "S");
-  x++;
+  x--;
+  x = lcdPrint(x, 1, " S ");
   x = lcdPrintInt(x, 1, servoGetAngle());
-  x++;
-  x = lcdPrint(x, 1, "OST");
-  x++;
-  x = lcdPrintInt(x, 1, ost);
+
+  lcdPrintInt(16, 0, ost);
 
   if (t0 < t0Normal - t0Delta) {
     servoAdd(1);
   } else if (t0 > t0Normal + t0Delta) {
     servoAdd(-1);
   }
-  if (ost >= 0) {
+  if (t0 > cfgTTailStart() && ost <= 0) {
     prog1Step(6);
   }
 }
@@ -199,8 +185,7 @@ void prog1Step5(float t0) {
 void prog1Step6(float t0) {
   float tTailStop = cfgTTailStop();
   byte x = 0;
-  x = lcdPrint(x, 1, "T0MAX");
-  x++;
+  x = lcdPrint(x, 1, "T0MAX ");
   x = lcdPrintFloat(x, 1, tTailStop);
   if (t0 > tTailStop) {
     cookOff();
@@ -212,8 +197,7 @@ void prog1Step6(float t0) {
 void prog1Step7() {
   int ost = cfgCoolingTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
   byte x = 0;
-  x = lcdPrint(x, 1, "OST");
-  x++;
+  x = lcdPrint(x, 1, "OST ");
   x = lcdPrintInt(x, 1, ost);
   if (ost <= 0) {
     compressorOff();

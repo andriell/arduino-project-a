@@ -24,9 +24,10 @@ boolean servoAdd(int a) {
   if (!servoActive) {
     return true;
   }
-  if (millis() - servoTime < ((unsigned long) cfgServoTime()) * 60000) {
+  if (millis() - servoTime < ((unsigned long) cfgServoTime()) * 1000) {
     return true;
   }
+  servoTime = millis();
   boolean r = true;
   int vMin = cfgServoMin();
   int vMax = cfgServoMax();

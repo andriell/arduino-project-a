@@ -19,7 +19,7 @@ void lcdLog(String str) {
   if (lcdLogI > 3) {
     lcdLogI = 0;
   }
-  delay(1000);
+  delay(200);
 }
 
 byte lcdPrint(byte x, byte y, String str) {
@@ -37,7 +37,7 @@ byte lcdPrintInt(byte x, byte y, int str) {
   }
   do {
     x++;
-    str = str % 10;
+    str = str / 10;
   } while (str > 0);
   return x;
 }
