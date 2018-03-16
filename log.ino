@@ -35,7 +35,10 @@ void logThermo(float* t, byte lenght) {
       dataFile.print('\t');
       dataFile.print(t[i]);
     }
-    dataFile.println();
+    dataFile.print('\t');
+    dataFile.print(servoGetAngle());
+    dataFile.print('\t');
+    dataFile.println(prog1GetStep());
     dataFile.close();
   }
 }

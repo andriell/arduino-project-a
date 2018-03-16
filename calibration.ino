@@ -1,4 +1,4 @@
-#define CALIBRATION_FILE "calibration.csv"
+#define CALIBRATION_FILE "calib.csv"
 boolean calibrationActive = false;
 int calibrationT0Prev = 0;
 

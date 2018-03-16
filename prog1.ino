@@ -106,6 +106,13 @@ void prog1Loop(float t0, float tTank, float tCooler, float tOz) {
   x = lcdPrint(x, 3, " ");
 }
 
+String prog1GetStep() {
+  if (prog1StepI <= 0 || prog1StepI >= PROG1_MAX_STEP) {
+    return "";
+  }
+  return prog1[prog1StepI];
+}
+
 void prog1Step(byte i) {
   prog1StepI = i;
   servoAdd(180); // Закрыть охлаждение

@@ -39,7 +39,7 @@ void menu() {
   }
   if (bitRead(jButtons, 12)) {
     menuSelected++;
-    if (menuSelected >= MENU_SIZE - 1) {
+    if (menuSelected >= MENU_SIZE) {
       menuSelected = 0;
     }
   }

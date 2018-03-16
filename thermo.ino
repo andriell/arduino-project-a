@@ -34,6 +34,6 @@ void thermoSetup() {
 }
 
 int thermo0Int() {
-  analogRead(THERMO_PIN_0);
+  return analogRead(THERMO_PIN_0);
 }
 
