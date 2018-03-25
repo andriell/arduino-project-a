@@ -35,7 +35,7 @@ void calibrationLoop() {
     dataFile.print('\t');
     dataFile.print(t0);
     dataFile.print('\t');
-    dataFile.println(thermoT0());
+    dataFile.println(thermoTC());
     dataFile.close();
   }
   calibrationT0Prev = t0;
