@@ -22,6 +22,20 @@ void lcdLog(String str) {
   delay(200);
 }
 
+void lcdLogInt(String str, int i) {
+  str = mutko(str);
+  Serial.print(str);
+  Serial.println(i);
+  lcdClear(lcdLogI);
+  lcdPrint(0, lcdLogI, str);
+  lcdPrintInt(0, lcdLogI, i);
+  lcdLogI++;
+  if (lcdLogI > 3) {
+    lcdLogI = 0;
+  }
+  delay(200);
+}
+
 byte lcdPrint(byte x, byte y, String str) {
   lcd.setCursor(x, y);
   lcd.print(mutko(str));

@@ -16,7 +16,7 @@ DeviceAddress thermometer[4] =
 float* thermo() {
   sensors.requestTemperatures();
   float t[THERMO_SENSOR_COUNT];
-  for (byte i = 0; i < THERMO_SENSOR_COUNT; i++) {
+  for (byte i = 1; i < THERMO_SENSOR_COUNT; i++) {
     t[i] = sensors.getTempC(thermometer[i]);
   }
   return t;
@@ -25,8 +25,27 @@ float* thermo() {
 void thermoSetup() {
   lcdLog("Thermo loading...");
   pinMode(THERMO_PIN_0, INPUT);
-  
+
   sensors.begin();
+
+  int deviceCount = sensors.getDeviceCount();
+  lcdLogInt("Thermo count ", deviceCount);
+
+  DeviceAddress tempDeviceAddress;
+  char tempDeviceAddressStr[20];
+
+  for (int i = 0; i < deviceCount; i++)
+  {
+    if (sensors.getAddress(tempDeviceAddress, i))
+    {
+      sprintf(tempDeviceAddressStr, "%02d-%02X%02X%02X%02X%02X%02X%02X%02X", i, tempDeviceAddress[0], tempDeviceAddress[1], tempDeviceAddress[2], tempDeviceAddress[3], tempDeviceAddress[4], tempDeviceAddress[5], tempDeviceAddress[6], tempDeviceAddress[7]);
+      tempDeviceAddressStr[19] = '\0';
+      lcdLog(tempDeviceAddressStr);
+    } else {
+      lcdLogInt("Not found thermo  ", i);
+    }
+  }
+
   for (int i = 0; i < THERMO_SENSOR_COUNT; i++) {
     sensors.setResolution(thermometer[i], THERMO_PRECISION);
   }
@@ -37,3 +56,8 @@ int thermo0Int() {
   return analogRead(THERMO_PIN_0);
 }
 
+float thermo0Float() {
+  float r = (float) thermo0Int();
+  r = r / 10;
+  return r;
+}

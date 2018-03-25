@@ -20,7 +20,7 @@ void timeMenu() {
   menuTitle(1);
   oledPrint(timeStr(), 5, 24, 0);
 
-  char timeNewStr[19];
+  char timeNewStr[20];
   sprintf(timeNewStr, "%04d-%02d-%02d %02d:%02d:%02d", timeNew[0], timeNew[1], timeNew[2], timeNew[3], timeNew[4], timeNew[5]);
   timeNewStr[19] = '\0';
 
