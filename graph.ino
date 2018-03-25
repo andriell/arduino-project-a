@@ -92,7 +92,7 @@ void graphMenu() {
   // -- Конец контроля
 }
 
-void graphPut(float t) {
+void graphLoop() {
   unsigned long m = millis();
   if (m - graphTime < 60000) {
     return;
@@ -102,6 +102,6 @@ void graphPut(float t) {
   if (graphI >= GRAPH_SIZE) {
     graphI = 0;
   }
-  graph[graphI] = (int) (t * 100);
+  graph[graphI] = (int) (thermoT0() * 100);
 }
 

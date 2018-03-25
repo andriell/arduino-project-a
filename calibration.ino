@@ -21,7 +21,7 @@ void calibrationMenu() {
   }
 }
 
-void calibrationLoop(float* t, byte lenght) {
+void calibrationLoop() {
   if (!calibrationActive) {
     return;
   }
@@ -35,11 +35,7 @@ void calibrationLoop(float* t, byte lenght) {
     dataFile.print('\t');
     dataFile.print(t0);
     dataFile.print('\t');
-    for (byte i = 0; i < lenght; i++) {
-      dataFile.print('\t');
-      dataFile.print(t[i]);
-    }
-    dataFile.println();
+    dataFile.println(thermoT0());
     dataFile.close();
   }
   calibrationT0Prev = t0;

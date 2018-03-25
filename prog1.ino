@@ -44,7 +44,7 @@ void prog1Menu() {
   }
 }
 
-void prog1Loop(float t0, float tTank, float tCooler, float tOz) {
+void prog1Loop() {
   if (prog1StepI <= 0 || prog1StepI >= PROG1_MAX_STEP) {
     return;
   }
@@ -59,19 +59,19 @@ void prog1Loop(float t0, float tTank, float tCooler, float tOz) {
       prog1Step1();
       break;
     case 2:
-      prog1Step2(t0);
+      prog1Step2();
       break;
     case 3:
       prog1Step3();
       break;
     case 4:
-      prog1Step4(t0);
+      prog1Step4();
       break;
     case 5:
-      prog1Step5(t0);
+      prog1Step5();
       break;
     case 6:
-      prog1Step6(t0);
+      prog1Step6();
       break;
     case 7:
       prog1Step7();
@@ -81,28 +81,28 @@ void prog1Loop(float t0, float tTank, float tCooler, float tOz) {
       break;
   }
 
-  if (tOz > cfgOzMax()) {
+  if (thermoTOZ() > cfgOzMax()) {
     lcdPrint(1, 1, "!!! \216\206 \243\256\340\357\347\240\357 !!!");
     controlBeep(10);
   }
 
-  if (tOz > cfgOzMax() + 10) {
+  if (thermoTOZ() > cfgOzMax() + 10) {
     cookOff();
     prog1Step(7);
   }
 
   byte x = 0;
   x = lcdPrint(x, 2, " TO ");
-  x = lcdPrintFloat(x, 2, t0);
+  x = lcdPrintFloat(x, 2, thermoT0());
   x = lcdPrint(x, 2, "  TC ");
-  x = lcdPrintFloat(x, 2, tCooler);
+  x = lcdPrintFloat(x, 2, thermoTC());
   x = lcdPrint(x, 2, " ");
 
   x = 0;
   x = lcdPrint(x, 3, " TT ");
-  x = lcdPrintFloat(x, 3, tTank);
+  x = lcdPrintFloat(x, 3, thermoTT());
   x = lcdPrint(x, 3, "  OZ ");
-  x = lcdPrintFloat(x, 3, tOz);
+  x = lcdPrintFloat(x, 3, thermoTOZ());
   x = lcdPrint(x, 3, " ");
 }
 
@@ -128,11 +128,11 @@ void prog1Step1() {
 }
 
 // Разогрев
-void prog1Step2(float t0) {
+void prog1Step2() {
   byte x = 0;
   x = lcdPrint(x, 1, "T0MIN ");
   x = lcdPrintInt(x, 1, (int) cfgTHeadStart());
-  if (t0 > cfgTHeadStart()) {
+  if (thermoT0() > cfgTHeadStart()) {
     compressorOn(); // Включаем компрессор
     cookGood(); // Выставляем температуру на плите
     prog1Step(3);
@@ -151,18 +151,18 @@ void prog1Step3() {
 }
 
 // Отбор тела 1
-void prog1Step4(float t0) {
+void prog1Step4() {
   float t0Normal = cfgT0();
   byte x = 0;
   x = lcdPrint(x, 1, "T0N ");
   x = lcdPrintFloat(x, 1, t0Normal);
-  if (t0 > t0Normal) {
+  if (thermoT0() > t0Normal) {
     prog1Step(5);
   }
 }
 
 // Отбор тела 2
-void prog1Step5(float t0) {
+void prog1Step5() {
   float t0Normal = cfgT0();
   float t0Delta = cfgT0Delta();
   int ost = cfgT0MinTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
@@ -178,23 +178,23 @@ void prog1Step5(float t0) {
 
   lcdPrintInt(16, 0, ost);
 
-  if (t0 < t0Normal - t0Delta) {
+  if (thermoT0() < t0Normal - t0Delta) {
     servoAdd(1);
-  } else if (t0 > t0Normal + t0Delta) {
+  } else if (thermoT0() > t0Normal + t0Delta) {
     servoAdd(-1);
   }
-  if (t0 > cfgTTailStart() && ost <= 0) {
+  if (thermoT0() > cfgTTailStart() && ost <= 0) {
     prog1Step(6);
   }
 }
 
 // Отбор хвостов
-void prog1Step6(float t0) {
+void prog1Step6() {
   float tTailStop = cfgTTailStop();
   byte x = 0;
   x = lcdPrint(x, 1, "T0MAX ");
   x = lcdPrintFloat(x, 1, tTailStop);
-  if (t0 > tTailStop) {
+  if (thermoT0() > tTailStop) {
     cookOff();
     prog1Step(7);
   }
@@ -216,5 +216,4 @@ void prog1Step7() {
 void prog1Step8() {
   prog1Step(255);
 }
-
 

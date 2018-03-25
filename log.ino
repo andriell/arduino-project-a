@@ -22,7 +22,7 @@ void logSetup() {
   lcdLog("SD loaded");
 }
 
-void logThermo(float* t, byte lenght) {
+void logLoop() {
   unsigned long m = millis();
   if (m - logTime < 10000) {
     return;
@@ -31,10 +31,14 @@ void logThermo(float* t, byte lenght) {
   File dataFile = SD.open(logFileName, FILE_WRITE);
   if (dataFile) {
     dataFile.print(timeStr());
-    for (byte i = 0; i < lenght; i++) {
-      dataFile.print('\t');
-      dataFile.print(t[i]);
-    }
+    dataFile.print('\t');
+    dataFile.print(thermoT0());
+    dataFile.print('\t');
+    dataFile.print(thermoTC());
+    dataFile.print('\t');
+    dataFile.print(thermoTT());
+    dataFile.print('\t');
+    dataFile.print(thermoTOZ());
     dataFile.print('\t');
     dataFile.print(servoGetAngle());
     dataFile.print('\t');

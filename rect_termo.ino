@@ -21,7 +21,6 @@ char logFileName[13];
 // -- Конец SD
 
 // -- Начало температуры
-#define THERMO_SENSOR_COUNT 4
 // -- Конец температуры
 
 // -- Начало Servo
@@ -52,19 +51,20 @@ void loop() {
   jButtons = 0;
   control(5);
   
-  float* t = thermo();
+  thermoLoop();
+  Serial.println(thermoT0Int());
   Serial.println(thermoT0());
-  Serial.println(t[1]);
-  Serial.println(t[2]);
-  Serial.println(t[3]);
+  Serial.println(thermoTC());
+  Serial.println(thermoTT());
+  Serial.println(thermoTOZ());
   
-  graphPut(t[0]);
+  graphLoop();
   
-  calibrationLoop(t, THERMO_SENSOR_COUNT);
+  calibrationLoop();
 
-  prog1Loop(thermoT0(), t[1], t[2], t[3]);
+  prog1Loop();
   
-  logThermo(t, THERMO_SENSOR_COUNT);
+  logLoop();
 
   oledClean();
   menuLoop();

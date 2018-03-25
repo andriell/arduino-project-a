@@ -1,17 +1,18 @@
 #define THERMO_PIN 8
 #define THERMO_PRECISION 11
+#define THERMO_SENSOR_COUNT 3
 const int THERMO_PIN_0 = A3;
 
 OneWire oneWire(THERMO_PIN);
 DallasTemperature sensors(&oneWire);
 
-DeviceAddress thermometer[4] =
+DeviceAddress thermometer[3] =
 {
   { 0x28, 0xFF, 0x10, 0xD1, 0xC1, 0x17, 0x4, 0xA1 },
-  { 0x28, 0xFF, 0xAA, 0xB5, 0xC1, 0x17, 0x4, 0xCD },
   { 0x28, 0xFF, 0x99, 0xE3, 0xC1, 0x17, 0x5, 0x88 },
   { 0x28, 0xFF, 0xA5, 0xEC, 0xC1, 0x17, 0x5, 0xB7 }
 };
+float thermo[4] = {0, 0, 0, 0};
 
 int thermoCalibration[103];
 void thermoSetupCalibration() {
@@ -78,15 +79,6 @@ void thermoSetupCalibration() {
     thermoCalibration[63] = 10268;
 }
 
-float* thermo() {
-  sensors.requestTemperatures();
-  float t[THERMO_SENSOR_COUNT];
-  for (byte i = 1; i < THERMO_SENSOR_COUNT; i++) {
-    t[i] = sensors.getTempC(thermometer[i]);
-  }
-  return t;
-}
-
 void thermoSetup() {
   lcdLog("Thermo loading...");
   thermoSetupCalibration();
@@ -118,15 +110,39 @@ void thermoSetup() {
   lcdLog("Thermo loaded");
 }
 
+void thermoLoop() {
+  int i = thermoT0Int();
+  int key = floor(((float) i) / 10);
+  thermo[0] = 0;
+  if (key > 0 && key < 101) {
+    thermo[0] = ((float) map(i, key * 10, (key + 1) * 10, thermoCalibration[key], thermoCalibration[key + 1])) / 100;
+  }
+
+  sensors.requestTemperatures();
+  for (byte i = 0; i < THERMO_SENSOR_COUNT; i++) {
+    thermo[i + 1] = sensors.getTempC(thermometer[i]);
+  }
+}
+
 int thermoT0Int() {
   return analogRead(THERMO_PIN_0);
 }
 
 float thermoT0() {
-  int i = thermoT0Int();
-  int key = floor(((float) i) / 10);
-  if (key < 0 || key > 101) {
-    return 0;
-  }
-  return ((float) map(i, key * 10, (key + 1) * 10, thermoCalibration[key], thermoCalibration[key + 1])) / 100;
+  return thermo[0];
+}
+
+// Cooler
+float thermoTC() {
+  return thermo[1];
+}
+
+// Tank
+float thermoTT() {
+  return thermo[2];
+}
+
+// Coolant 
+float thermoTOZ() {
+  return thermo[3];
 }
