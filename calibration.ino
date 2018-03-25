@@ -25,7 +25,7 @@ void calibrationLoop(float* t, byte lenght) {
   if (!calibrationActive) {
     return;
   }
-  int t0 = thermo0Int();
+  int t0 = thermoT0Int();
   if (calibrationT0Prev == t0) {
     return;
   }

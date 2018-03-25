@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Calibration</title>
+</head>
+<body>
+<table>
+    <tr>
+        <td>
+            <textarea id="in" style="width: 400px; height: 200px; border: solid 1px #000000"></textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button id="convert">Convert</button>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <textarea id="out" style="width: 400px; height: 200px; border: solid 1px #000000"></textarea>
+        </td>
+    </tr>
+</table>
+<script type="text/javascript">
+    $(function () {
+        $("#convert").on('click', function () {
+            var sum = {};
+            var rows = $('#in').val().split("\n");
+            for (var i in rows) {
+                var row = rows[i];
+                if (row.length < 3) {
+                    continue;
+                }
+                var col = row.split("\t");
+                var float = parseFloat(col[1].replace(/,/, '.'));
+                var key = Math.round(parseInt(col[0]) / 10);
+                if (key in sum) {
+                    sum[key]['s'] += float;
+                    sum[key]['c']++;
+                } else {
+                    sum[key] = {
+                        's': float,
+                        'c': 1
+                    };
+                }
+            }
+            var r = "int thermoCalibration[103];\n";
+            r += "void thermoSetupCalibration() {\n";
+            for (var i = 0; i < 103; i++) {
+                if (i in sum) {
+                    r += '    thermoCalibration[' + i + '] = ' + Math.round((sum[i]['s'] / sum[i]['c']) * 100) + ';\n';
+                }
+            }
+            r += '}\n\n';
+            for (var i = 0; i < 103; i++) {
+                if (i in sum) {
+                    r += (i * 10) + '\t' + Math.round((sum[i]['s'] / sum[i]['c']) * 100) / 100 + '\n';
+                }
+            }
+            $('#out').val(r);
+        });
+    });
+</script>
+</body>
+</html>
+

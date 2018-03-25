@@ -53,7 +53,7 @@ void loop() {
   control(5);
   
   float* t = thermo();
-  Serial.println(thermo0Float());
+  Serial.println(thermoT0());
   Serial.println(t[1]);
   Serial.println(t[2]);
   Serial.println(t[3]);
@@ -62,7 +62,7 @@ void loop() {
   
   calibrationLoop(t, THERMO_SENSOR_COUNT);
 
-  prog1Loop(thermo0Float(), t[1], t[2], t[3]);
+  prog1Loop(thermoT0(), t[1], t[2], t[3]);
   
   logThermo(t, THERMO_SENSOR_COUNT);
 
