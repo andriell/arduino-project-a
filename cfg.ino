@@ -99,7 +99,7 @@ void cfgMenu() {
   oledPrintFloat(val, 28, 30, 1);
 
   oledPrintNl(current.vName, 40);
-  
+
   // Контроль
   if (bitRead(jButtons, 10)) {
     cfgWrite(cfgMenuI, valInt + current.vStep);

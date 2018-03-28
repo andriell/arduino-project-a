@@ -44,26 +44,28 @@ void setup() {
   logSetup();
   servoSetup();
   controlSetup();
+  compressorSetup();
+  cookSetup();
   lcd.clear();
 }
 
 void loop() {
   jButtons = 0;
   control(5);
-  
+
   thermoLoop();
   Serial.println(thermoT0Int());
   Serial.println(thermoT0());
   Serial.println(thermoTC());
   Serial.println(thermoTT());
   Serial.println(thermoTOZ());
-  
+
   graphLoop();
-  
+
   calibrationLoop();
 
   prog1Loop();
-  
+
   logLoop();
 
   oledClean();
