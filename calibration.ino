@@ -1,6 +1,6 @@
 #define CALIBRATION_FILE "calib.csv"
 boolean calibrationActive = false;
-int calibrationT0Prev = 0
+int calibrationT0Prev = 0;
 
 void calibrationMenu() {
   menuTitle(3);
