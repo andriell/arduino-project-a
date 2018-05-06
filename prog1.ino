@@ -124,7 +124,9 @@ String prog1GetStep() {
 void prog1Step(byte i) {
   prog1StepI = i;
   servoAdd(180); // Закрыть охлаждение
-  controlBeep(i);
+  if (i <= PROG1_MAX_STEP) {
+    controlBeep(i);
+  }
   prog1StepStartTime = millis();
   prog1StepStartTimeStr = timeStr();
 }

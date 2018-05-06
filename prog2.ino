@@ -75,7 +75,7 @@ void prog2Loop() {
 
   if (thermoTOZ() > cfgOzMax() + 10) {
     cookOff();
-    prog2Step(7);
+    prog2Step(4);
   }
 
   byte x = 0;
@@ -96,7 +96,9 @@ String prog2GetStep() {
 void prog2Step(byte i) {
   prog2StepI = i;
   servoAdd(180); // Закрыть охлаждение
-  controlBeep(i);
+  if (i <= PROG1_MAX_STEP) {
+    controlBeep(i);
+  }
   prog2StepStartTime = millis();
   prog2StepStartTimeStr = timeStr();
 }
@@ -111,7 +113,7 @@ void prog2Step1() {
 void prog2Step2() {
   byte x = 0;
   x = lcdPrint(x, 1, "TTMIN ");
-  x = lcdPrintInt(x, 1, (int) cfg2TTStart());
+  x = lcdPrintFloat(x, 1, cfg2TTStart());
   if (thermoTT() > cfg2TTStart()) {
     compressorOn(); // Включаем компрессор
     cook2Body(); // Выставляем температуру на плите
