@@ -37,6 +37,7 @@ unsigned int jButtons = 0;
 
 void setup() {
   Serial.begin(9600);
+  cfgSetup();
   lcdSetup();
   oledSetap();
   thermoSetup();

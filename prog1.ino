@@ -134,7 +134,7 @@ void prog1Step2() {
   x = lcdPrintInt(x, 1, (int) cfgTHeadStart());
   if (thermoT0() > cfgTHeadStart()) {
     compressorOn(); // Включаем компрессор
-    cookGood(); // Выставляем температуру на плите
+    cookHead(); // Выставляем температуру на плите
     prog1Step(3);
   }
 }
@@ -146,6 +146,8 @@ void prog1Step3() {
   x = lcdPrint(x, 1, "OST ");
   x = lcdPrintInt(x, 1, ost);
   if (ost <= 0) {
+    compressorOn(); // Включаем компрессор
+    cookBody();  // Выставляем температуру на плите
     prog1Step(4);
   }
 }
@@ -161,6 +163,8 @@ void prog1Step4() {
 //  }
   int ost = cfgT0MinTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
   if (thermoT0() > cfgTTailStart() && ost <= 0) {
+    compressorOn();  // Включаем компрессор
+    cookTail();  // Выставляем температуру на плите
     prog1Step(5);
   }
 }
