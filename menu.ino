@@ -1,5 +1,5 @@
 const byte MENU_TOP = 14;
-const byte MENU_SIZE = 8;
+const byte MENU_SIZE = 9;
 char* menuList[] = {
   "\203\340\240\344\250\252",
   "\204\240\342\240/\242\340\245\254\357",
@@ -7,6 +7,7 @@ char* menuList[] = {
   "K\240\253\250\241\340\256\242\252\240",
   "\215\240\341\342\340\256\251\252\250",
   "\220\245\252\342\250\344\250\252\240\346\250\357",
+  "\204\250\341\342\250\253\253\357\346\250\357",
   "\212\256\254\257\340\245\341\341\256\340",
   "\217\245\347\354",
 };
@@ -72,8 +73,10 @@ void menuLoop() {
   } else if (menuActive == 5) {
     prog1Menu();
   } else if (menuActive == 6) {
-    compressorMenu();
+    prog2Menu();
   } else if (menuActive == 7) {
+    compressorMenu();
+  } else if (menuActive == 8) {
     cookMenu();
   } else {
     menu();

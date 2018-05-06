@@ -12,7 +12,7 @@ char* prog1[] = {
   "\202\252\253\356\347\245\255\250\245",
   "\220\240\247\256\243\340\245\242",
   "\216\342\241\256\340 \243\256\253\256\242",
-  "\216\342\241\256\340 \342\245\253\240 1",
+  "\216\342\241\256\340 \342\245\253\240",
 //  "\216\342\241\256\340 \342\245\253\240 2",
   "\216\342\241\256\340 \345\242\256\341\342\256\242",
   "\216\345\253\240\246\244\245\255\250\245",
@@ -39,7 +39,8 @@ void prog1Menu() {
     }
   }
   if (bitRead(jButtons, 14)) {
-    prog1StepI = prog1MenuStepI;
+    prog1Step(prog1MenuStepI);
+    prog2Step(255);
     menuOpen(255);
   }
 }
@@ -106,6 +107,13 @@ void prog1Loop() {
   x = lcdPrint(x, 3, " ");
 }
 
+void prog1ControlT0() {
+  if (thermoT0() < cfgT0() - cfgT0Delta()) {
+    lcdPrint(1, 1, "!!! T0 \255\250\247\252\240\357 !!!");
+    controlBeep(10);
+  }
+}
+
 String prog1GetStep() {
   if (prog1StepI <= 0 || prog1StepI >= PROG1_MAX_STEP) {
     return "";
@@ -145,6 +153,7 @@ void prog1Step3() {
   byte x = 0;
   x = lcdPrint(x, 1, "OST ");
   x = lcdPrintInt(x, 1, ost);
+  prog1ControlT0();
   if (ost <= 0) {
     compressorOn(); // Включаем компрессор
     cookBody();  // Выставляем температуру на плите
@@ -158,6 +167,7 @@ void prog1Step4() {
   byte x = 0;
   x = lcdPrint(x, 1, "T0N ");
   x = lcdPrintFloat(x, 1, t0Normal);
+  prog1ControlT0();
 //  if (thermoT0() > t0Normal) {
 //    prog1Step(5);
 //  }
@@ -202,6 +212,7 @@ void prog1Step5() {
   byte x = 0;
   x = lcdPrint(x, 1, "T0MAX ");
   x = lcdPrintFloat(x, 1, tTailStop);
+  prog1ControlT0();
   if (thermoT0() > tTailStop) {
     cookOff();
     prog1Step(6);

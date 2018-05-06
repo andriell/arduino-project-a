@@ -42,7 +42,9 @@ void logLoop() {
     dataFile.print('\t');
     dataFile.print(servoGetAngle());
     dataFile.print('\t');
-    dataFile.println(prog1GetStep());
+    dataFile.print(prog1GetStep());
+    dataFile.print('\t');
+    dataFile.println(prog2GetStep());
     dataFile.close();
   }
 }

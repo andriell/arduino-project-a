@@ -66,6 +66,7 @@ void loop() {
   calibrationLoop();
 
   prog1Loop();
+  prog2Loop();
 
   logLoop();
 

@@ -6,7 +6,7 @@ struct CfgMenuStruct {
   int vDivider;
   int vStep;
 };
-const byte CFG_MENU_ELEMENTS_SIZE = 15;
+const byte CFG_MENU_ELEMENTS_SIZE = 19;
 CfgMenuStruct cfgMenuElements[] = {
   {0, "\220. \222\245\254\257\245\340\240\342\343\340\240 \256\342\241\256\340\240 (C\370)", 700, 1000, 10, 1},
   {1, "\220. \222\245\254\257\245\340\240\342\343\340\240 \256\342\241\256\340\240 \244\245\253\354\342\240 (C\370)", 0, 500, 10, 1},
@@ -21,6 +21,11 @@ CfgMenuStruct cfgMenuElements[] = {
   {16, "\220. \210\235\215 \257\256\247\250\346\250\357 \256\342\241\256\340\240 \342\245\253\240", 0, 20, 1, 1},
   {17, "\220. \210\235\215 \257\256\247\250\346\250\357 \256\342\241\256\340\240 \345\242\256\341\342\256\242", 0, 20, 1, 1},
   {15, "\220. \202\340\245\254\357 \256\341\342\353\242\240\255\250\357 \254\250\255.", 5, 60, 1, 1},
+  {7, "\204. \222\245\254\257\245\340\240\342\343\340\240 \255\240\347\240\253\240 \256\342\241\256\340\240", 400, 1000, 10, 1},
+  {8, "\204. \222\245\254\257\245\340\240\342\343\340\240 \247\240\242\245\340\350\245\255\250\357 \256\342\241\256\340\240", 400, 1000, 10, 1},
+  {9, "\204. \214\250\255\250\254\240\253\354\255\256\245 \242\340\245\254\357 \256\342\241\256\340\240 \254\250\255.", 10, 300, 1, 1},
+  {18, "\204. \210\235\215 \257\256\247\250\346\250\357 \256\342\241\256\340\240", 0, 20, 1, 1},
+  {19, "\204. \202\340\245\254\357 \256\341\342\353\242\240\255\250\357 \254\250\255.", 5, 60, 1, 1},
   {14, "\210\255\342\245\340\242\240\253 \253\256\243\250\340\256\242\240\255\250\357 \341\245\252.", 10, 600, 1, 1},
   {11, "\222\256\255 \252\255\256\257\256\252", 0, 2000, 1, 100},
   //  {7, "\220. \221\245\340\242\256 min \343\243\256\253", 0, 180, 1, 1},
@@ -28,7 +33,7 @@ CfgMenuStruct cfgMenuElements[] = {
   //  {9, "\220. \221\245\340\242\256 \247\240\244\245\340\246\252\240 \341\245\252.", 5, 900, 1, 1},
 };
 
-byte cfgAddr2I[20];
+byte cfgAddr2I[CFG_MENU_ELEMENTS_SIZE];
 
 void cfgSetup() {
   for (byte i = 0; i < CFG_MENU_ELEMENTS_SIZE; i++) {
@@ -132,15 +137,27 @@ int cfgTHeadTime() {
   return cfgRead(6);
 }
 
-int cfgServoMin() {
-  return cfgRead(7);
+//int cfgServoMin() {
+//  return cfgRead(7);
+//}
+
+//int cfgServoMax() {
+//  return cfgRead(8);
+//}
+
+//int cfgServoTime() {
+//  return cfgRead(9);
+//}
+
+float cfg2TTStart() {
+  return cfgReadFloat(7);
 }
 
-int cfgServoMax() {
-  return cfgRead(8);
+float cfg2TTStop() {
+  return cfgReadFloat(8);
 }
 
-int cfgServoTime() {
+int cfg2BodyTime() {
   return cfgRead(9);
 }
 
@@ -160,14 +177,6 @@ int cfgCookStepHead() {
   return cfgRead(13);
 }
 
-int cfgCookStepBody() {
-  return cfgRead(16);
-}
-
-int cfgCookStepTail() {
-  return cfgRead(17);
-}
-
 int cfgLogTime() {
   return cfgRead(14);
 }
@@ -176,3 +185,18 @@ int cfgCoolingTime() {
   return cfgRead(15);
 }
 
+int cfgCookStepBody() {
+  return cfgRead(16);
+}
+
+int cfgCookStepTail() {
+  return cfgRead(17);
+}
+
+int cfg2CookBody() {
+  return cfgRead(18);
+}
+
+int cfg2CoolingTime() {
+  return cfgRead(19);
+}

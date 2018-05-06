@@ -73,6 +73,13 @@ void cookTail() {
   cookP(n);
 }
 
+void cook2Body() {
+  int n = cfgCookStepAll();
+  cookM(n);
+  n = cfg2CookBody();
+  cookP(n);
+}
+
 void cookOff() {
   digitalWrite(COOK_O_PIN, LOW);
   delay(200);
