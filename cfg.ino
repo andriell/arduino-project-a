@@ -33,16 +33,20 @@ byte cfgAddr2I[20];
 void cfgSetup() {
   for (byte i = 0; i < CFG_MENU_ELEMENTS_SIZE; i++) {
     cfgAddr2I[cfgMenuElements[i].vAddr] = i;
+    
+  }
+  for (byte i = 0; i < 20; i++) {
+    Serial.print(i);
+    Serial.print(" ");
+    Serial.println(cfgAddr2I[i]);
   }
 }
-
 
 byte cfgMenuI = 0;
 void cfgMenu() {
   menuTitle(4);
-  byte addr = cfgAddr2I[cfgMenuI];
-  int valInt = cfgRead(addr);
   CfgMenuStruct current = cfgMenuElements[cfgMenuI];
+  int valInt = cfgRead(current.vAddr);
   float val = ((float) valInt) / current.vDivider;
   oledPrintFloat(val, 28, 30, 1);
 
@@ -50,7 +54,7 @@ void cfgMenu() {
 
   // Контроль
   if (bitRead(jButtons, 10)) {
-    cfgWrite(addr, valInt + current.vStep);
+    cfgWrite(current.vAddr, valInt + current.vStep);
   }
   if (bitRead(jButtons, 11)) {
     cfgMenuI++;
@@ -59,7 +63,7 @@ void cfgMenu() {
     }
   }
   if (bitRead(jButtons, 12)) {
-    cfgWrite(addr, valInt - current.vStep);
+    cfgWrite(current.vAddr, valInt - current.vStep);
   }
   if (bitRead(jButtons, 13)) {
     if (cfgMenuI <= 0) {
@@ -76,11 +80,11 @@ void cfgMenu() {
 int cfgRead(byte addr) {
   int val;
   EEPROM.get(addr * 2, val);
-  if (val < cfgMenuElements[cfgAddr2I[cfgMenuI]].vMin) {
-    return cfgMenuElements[cfgAddr2I[cfgMenuI]].vMin;
+  if (val < cfgMenuElements[cfgAddr2I[addr]].vMin) {
+    return cfgMenuElements[cfgAddr2I[addr]].vMin;
   }
-  if (val > cfgMenuElements[cfgAddr2I[cfgMenuI]].vMax) {
-    return cfgMenuElements[cfgAddr2I[cfgMenuI]].vMax;
+  if (val > cfgMenuElements[cfgAddr2I[addr]].vMax) {
+    return cfgMenuElements[cfgAddr2I[addr]].vMax;
   }
   return val;
 }
@@ -91,11 +95,11 @@ float cfgReadFloat(byte addr) {
 
 // запись
 void cfgWrite(byte addr, int val) {
-  if (val < cfgMenuElements[cfgAddr2I[cfgMenuI]].vMin) {
-    val = cfgMenuElements[cfgAddr2I[cfgMenuI]].vMin;
+  if (val < cfgMenuElements[cfgAddr2I[addr]].vMin) {
+    val = cfgMenuElements[cfgAddr2I[addr]].vMin;
   }
-  if (val > cfgMenuElements[cfgAddr2I[cfgMenuI]].vMax) {
-    val = cfgMenuElements[cfgAddr2I[cfgMenuI]].vMax;
+  if (val > cfgMenuElements[cfgAddr2I[addr]].vMax) {
+    val = cfgMenuElements[cfgAddr2I[addr]].vMax;
   }
   EEPROM.put(addr * 2, val);
 }
