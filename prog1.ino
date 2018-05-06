@@ -13,7 +13,7 @@ char* prog1[] = {
   "\220\240\247\256\243\340\245\242",
   "\216\342\241\256\340 \243\256\253\256\242",
   "\216\342\241\256\340 \342\245\253\240",
-//  "\216\342\241\256\340 \342\245\253\240 2",
+  //"\216\342\241\256\340 \342\245\253\240 2",
   "\216\342\241\256\340 \345\242\256\341\342\256\242",
   "\216\345\253\240\246\244\245\255\250\245",
   "\202\341\245 \341\244\245\253\240\255\256",
@@ -68,9 +68,9 @@ void prog1Loop() {
     case 4:
       prog1Step4();
       break;
-//    case 5:
-//      prog1Step5();
-//      break;
+    //case 5:
+    //  prog1Step5();
+    //  break;
     case 5:
       prog1Step5();
       break;
@@ -84,7 +84,7 @@ void prog1Loop() {
 
   if (thermoTOZ() > cfgOzMax()) {
     lcdPrint(1, 1, "!!! \216\206 \243\256\340\357\347\240\357 !!!");
-    controlBeep(10);
+    beep(10);
   }
 
   if (thermoTOZ() > cfgOzMax() + 10) {
@@ -110,7 +110,7 @@ void prog1Loop() {
 void prog1ControlT0() {
   if (thermoT0() < cfgT0() - cfgT0Delta()) {
     lcdPrint(1, 1, "!!! T0 \255\250\247\252\240\357 !!!");
-    controlBeep(10);
+    beep(10);
   }
 }
 
@@ -125,7 +125,7 @@ void prog1Step(byte i) {
   prog1StepI = i;
   servoAdd(180); // Закрыть охлаждение
   if (i <= PROG1_MAX_STEP) {
-    controlBeep(i);
+    beep(i);
   }
   prog1StepStartTime = millis();
   prog1StepStartTimeStr = timeStr();
@@ -170,9 +170,9 @@ void prog1Step4() {
   x = lcdPrint(x, 1, "T0N ");
   x = lcdPrintFloat(x, 1, t0Normal);
   prog1ControlT0();
-//  if (thermoT0() > t0Normal) {
-//    prog1Step(5);
-//  }
+  //if (thermoT0() > t0Normal) {
+  //  prog1Step(5);
+  //}
   int ost = cfgT0MinTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
   if (thermoT0() > cfgTTailStart() && ost <= 0) {
     compressorOn();  // Включаем компрессор
@@ -235,6 +235,6 @@ void prog1Step6() {
 
 // Все сделано
 void prog1Step7() {
+  beepSong1(1);
   prog1Step(255);
 }
-

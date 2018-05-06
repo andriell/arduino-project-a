@@ -38,7 +38,6 @@ byte cfgAddr2I[CFG_MENU_ELEMENTS_SIZE];
 void cfgSetup() {
   for (byte i = 0; i < CFG_MENU_ELEMENTS_SIZE; i++) {
     cfgAddr2I[cfgMenuElements[i].vAddr] = i;
-    
   }
   for (byte i = 0; i < 20; i++) {
     Serial.print(i);

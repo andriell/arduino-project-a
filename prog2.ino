@@ -70,7 +70,7 @@ void prog2Loop() {
 
   if (thermoTOZ() > cfgOzMax()) {
     lcdPrint(1, 1, "!!! \216\206 \243\256\340\357\347\240\357 !!!");
-    controlBeep(10);
+    beep(10);
   }
 
   if (thermoTOZ() > cfgOzMax() + 10) {
@@ -97,7 +97,7 @@ void prog2Step(byte i) {
   prog2StepI = i;
   servoAdd(180); // Закрыть охлаждение
   if (i <= PROG1_MAX_STEP) {
-    controlBeep(i);
+    beep(i);
   }
   prog2StepStartTime = millis();
   prog2StepStartTimeStr = timeStr();
@@ -125,7 +125,7 @@ void prog2Step2() {
 void prog2Step3() {
   if (thermoTT() < cfg2TTStart()) {
     lcdPrint(1, 1, "!!! TT \255\250\247\252\240\357 !!!");
-    controlBeep(10);
+    beep(10);
   }
   int ost = cfg2BodyTime() * 60 - ((millis() - prog2StepStartTime) / 1000);
   byte x = 0;
@@ -152,5 +152,6 @@ void prog2Step4() {
 
 // Все сделано
 void prog2Step5() {
+  beepSong1(1.2);
   prog2Step(255);
 }

@@ -38,6 +38,7 @@ unsigned int jButtons = 0;
 void setup() {
   Serial.begin(9600);
   cfgSetup();
+  beepSetup();
   lcdSetup();
   oledSetap();
   thermoSetup();
@@ -48,6 +49,7 @@ void setup() {
   compressorSetup();
   cookSetup();
   lcd.clear();
+  beep(1);
 }
 
 void loop() {
@@ -74,4 +76,3 @@ void loop() {
   menuLoop();
   oledUpdate();
 }
-

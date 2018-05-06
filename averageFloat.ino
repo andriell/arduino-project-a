@@ -21,12 +21,12 @@ class averageFloat
       float r = 0;
       if (full) {
         for (byte j = 0; j < size; j++) {
-          r+=data[j];
+          r += data[j];
         }
         r = r / size;
       } else {
         for (byte j = 0; j < i; j++) {
-          r+=data[j];
+          r += data[j];
         }
         r = r / i;
       }
