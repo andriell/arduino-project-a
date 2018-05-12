@@ -59,6 +59,11 @@ void cookMax() {
   cookP(n);
 }
 
+void cookMin() {
+  int n = cfgCookStepAll();
+  cookM(n);
+}
+
 void cookHead() {
   int n = cfgCookStepAll();
   cookM(n);

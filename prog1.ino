@@ -1,4 +1,4 @@
-#define PROG1_MAX_STEP 8
+#define PROG1_MAX_STEP 10
 
 byte prog1StepI = 255;
 byte prog1MenuStepI = 0;
@@ -12,8 +12,9 @@ char* prog1[] = {
   "\202\252\253\356\347\245\255\250\245",
   "\220\240\247\256\243\340\245\242",
   "\216\342\241\256\340 \243\256\253\256\242",
+  "\215\240\347\240\253\256 \342\245\253\240"
   "\216\342\241\256\340 \342\245\253\240",
-  //"\216\342\241\256\340 \342\245\253\240 2",
+  "\215\240\347\240\253\256 \345\242\256\341\342\256\242",
   "\216\342\241\256\340 \345\242\256\341\342\256\242",
   "\216\345\253\240\246\244\245\255\250\245",
   "\202\341\245 \341\244\245\253\240\255\256",
@@ -68,9 +69,6 @@ void prog1Loop() {
     case 4:
       prog1Step4();
       break;
-    //case 5:
-    //  prog1Step5();
-    //  break;
     case 5:
       prog1Step5();
       break;
@@ -79,6 +77,12 @@ void prog1Loop() {
       break;
     case 7:
       prog1Step7();
+      break;
+    case 8:
+      prog1Step8();
+      break;
+    case 9:
+      prog1Step9();
       break;
   }
 
@@ -123,7 +127,6 @@ String prog1GetStep() {
 
 void prog1Step(byte i) {
   prog1StepI = i;
-  servoAdd(180); // Закрыть охлаждение
   if (i <= PROG1_MAX_STEP) {
     beep(i);
   }
@@ -159,58 +162,50 @@ void prog1Step3() {
   prog1ControlT0();
   if (ost <= 0) {
     compressorOn(); // Включаем компрессор
-    cookBody();  // Выставляем температуру на плите
+    cookMin();
     prog1Step(4);
   }
 }
 
-// Отбор тела 1
+// Начало тела
 void prog1Step4() {
+  lcdPrint(1, 1, "\215\240\347\240\253\256 \342\245\253\240");
+  beep(2);
+  if (bitRead(jButtons, 14)) {
+    compressorOn(); // Включаем компрессор
+    cookBody();  // Выставляем температуру на плите
+    prog1Step(5);
+  }
+}
+
+// Отбор тела
+void prog1Step5() {
   float t0Normal = cfgT0();
   byte x = 0;
   x = lcdPrint(x, 1, "T0N ");
   x = lcdPrintFloat(x, 1, t0Normal);
   prog1ControlT0();
-  //if (thermoT0() > t0Normal) {
-  //  prog1Step(5);
-  //}
   int ost = cfgT0MinTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
   if (thermoT0() > cfgTTailStart() && ost <= 0) {
     compressorOn();  // Включаем компрессор
-    cookTail();  // Выставляем температуру на плите
-    prog1Step(5);
+    cookMin();
+    prog1Step(6);
   }
 }
 
-// Отбор тела 2
-//void prog1Step5() {
-//  float t0Normal = cfgT0();
-//  float t0Delta = cfgT0Delta();
-//  int ost = cfgT0MinTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
-//  byte x = 0;
-//  x = lcdPrint(x, 1, "T0N ");
-//  x = lcdPrintFloat(x, 1, t0Normal);
-//  x--;
-//  x = lcdPrint(x, 1, "~");
-//  x = lcdPrintFloat(x, 1, t0Delta);
-//  x--;
-//  x = lcdPrint(x, 1, " S ");
-//  x = lcdPrintInt(x, 1, servoGetAngle());
-//
-//  lcdPrintInt(16, 0, ost);
-//
-//  if (thermoT0() < t0Normal - t0Delta) {
-//    servoAdd(1);
-//  } else if (thermoT0() > t0Normal + t0Delta) {
-//    servoAdd(-1);
-//  }
-//  if (thermoT0() > cfgTTailStart() && ost <= 0) {
-//    prog1Step(6);
-//  }
-//}
+// Начало хвостов
+void prog1Step6() {
+  lcdPrint(1, 1, "\215\240\347\240\253\256 \345\242\256\341\342\256\242");
+  beep(2);
+  if (bitRead(jButtons, 14)) {
+    compressorOn(); // Включаем компрессор
+    cookTail();
+    prog1Step(7);
+  }
+}
 
 // Отбор хвостов
-void prog1Step5() {
+void prog1Step7() {
   float tTailStop = cfgTTailStop();
   byte x = 0;
   x = lcdPrint(x, 1, "T0MAX ");
@@ -218,24 +213,24 @@ void prog1Step5() {
   prog1ControlT0();
   if (thermoT0() > tTailStop) {
     cookOff();
-    prog1Step(6);
+    prog1Step(8);
   }
 }
 
 // Охлождение
-void prog1Step6() {
+void prog1Step8() {
   int ost = cfgCoolingTime() * 60 - ((millis() - prog1StepStartTime) / 1000);
   byte x = 0;
   x = lcdPrint(x, 1, "OST ");
   x = lcdPrintInt(x, 1, ost);
   if (ost <= 0) {
     compressorOff();
-    prog1Step(7);
+    prog1Step(9);
   }
 }
 
 // Все сделано
-void prog1Step7() {
+void prog1Step9() {
   beepSong1(1);
   prog1Step(255);
 }
