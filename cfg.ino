@@ -94,7 +94,7 @@ int cfgRead(byte addr) {
 }
 
 float cfgReadFloat(byte addr) {
-  return ((float) cfgRead(addr)) / cfgMenuElements[cfgAddr2I[cfgMenuI]].vDivider;
+  return ((float) cfgRead(addr)) / cfgMenuElements[cfgAddr2I[addr]].vDivider;
 }
 
 // запись

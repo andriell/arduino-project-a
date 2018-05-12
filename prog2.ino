@@ -70,7 +70,7 @@ void prog2Loop() {
 
   if (thermoTOZ() > cfgOzMax()) {
     lcdPrint(1, 1, "!!! \216\206 \243\256\340\357\347\240\357 !!!");
-    beep(10);
+    beep(1);
   }
 
   if (thermoTOZ() > cfgOzMax() + 10) {
@@ -106,6 +106,7 @@ void prog2Step(byte i) {
 // Включение
 void prog2Step1() {
   cookOn(); // Включаем плиту
+  cookMax();
   prog2Step(2);
 }
 
@@ -125,7 +126,7 @@ void prog2Step2() {
 void prog2Step3() {
   if (thermoTT() < cfg2TTStart()) {
     lcdPrint(1, 1, "!!! TT \255\250\247\252\240\357 !!!");
-    beep(10);
+    beep(1);
   }
   int ost = cfg2BodyTime() * 60 - ((millis() - prog2StepStartTime) / 1000);
   byte x = 0;

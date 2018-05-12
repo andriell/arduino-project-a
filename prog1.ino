@@ -84,7 +84,7 @@ void prog1Loop() {
 
   if (thermoTOZ() > cfgOzMax()) {
     lcdPrint(1, 1, "!!! \216\206 \243\256\340\357\347\240\357 !!!");
-    beep(10);
+    beep(1);
   }
 
   if (thermoTOZ() > cfgOzMax() + 10) {
@@ -110,7 +110,7 @@ void prog1Loop() {
 void prog1ControlT0() {
   if (thermoT0() < cfgT0() - cfgT0Delta()) {
     lcdPrint(1, 1, "!!! T0 \255\250\247\252\240\357 !!!");
-    beep(10);
+    beep(1);
   }
 }
 
@@ -134,6 +134,7 @@ void prog1Step(byte i) {
 // Включение
 void prog1Step1() {
   cookOn(); // Включаем плиту
+  cookMax();
   prog1Step(2);
 }
 

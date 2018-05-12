@@ -38,6 +38,7 @@ void cookOn() {
 
 void cookP(int n) {
   for (int i = 0; i < n; i++) {
+    delay(200);
     digitalWrite(COOK_P_PIN, LOW);
     delay(200);
     digitalWrite(COOK_P_PIN, HIGH);
@@ -46,10 +47,16 @@ void cookP(int n) {
 
 void cookM(int n) {
   for (int i = 0; i < n; i++) {
+    delay(200);
     digitalWrite(COOK_M_PIN, LOW);
     delay(200);
     digitalWrite(COOK_M_PIN, HIGH);
   }
+}
+
+void cookMax() {
+  int n = cfgCookStepAll();
+  cookP(n);
 }
 
 void cookHead() {
