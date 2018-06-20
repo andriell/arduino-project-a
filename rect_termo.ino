@@ -37,6 +37,8 @@ unsigned int jButtons = 0;
 
 void setup() {
   Serial.begin(9600);
+  cfgSetup();
+  beepSetup();
   lcdSetup();
   oledSetap();
   thermoSetup();
@@ -44,30 +46,33 @@ void setup() {
   logSetup();
   servoSetup();
   controlSetup();
+  compressorSetup();
+  cookSetup();
   lcd.clear();
+  beep(1);
 }
 
 void loop() {
   jButtons = 0;
   control(5);
-  
+
   thermoLoop();
   Serial.println(thermoT0Int());
   Serial.println(thermoT0());
   Serial.println(thermoTC());
   Serial.println(thermoTT());
   Serial.println(thermoTOZ());
-  
+
   graphLoop();
-  
+
   calibrationLoop();
 
   prog1Loop();
-  
+  prog2Loop();
+
   logLoop();
 
   oledClean();
   menuLoop();
   oledUpdate();
 }
-

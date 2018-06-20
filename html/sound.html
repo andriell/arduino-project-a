@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Song</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    const C4 = 262;
+    const D4 = 294;
+    const E4 = 330;
+    const F4 = 349;
+    const G4 = 392;
+    const A4 = 440;
+    const B4 = 494;
+    const C5 = 523;
+    const D5 = 587;
+    const E5 = 659;
+    const F5 = 698;
+    const G5 = 784;
+    const A5 = 880;
+    const B5 = 988;
+
+    var player = {
+        audio: null,
+        rate: 1,
+        notes: [],
+        duration: [],
+        i: 0,
+        run: true,
+        init: function () {
+            player.audio = new (window.AudioContext || window.webkitAudioContext)();
+        },
+
+        playNote: function (frequency, duration, callback) {
+            if (!player.run) {
+                return;
+            }
+            var oscillator =  player.audio.createOscillator();
+            oscillator.type = 'square';
+            oscillator.frequency.value = frequency; // value in hertz
+            oscillator.connect(player.audio.destination);
+            oscillator.start();
+            setTimeout(function () {
+                oscillator.stop();
+                callback();
+            }, duration);
+        },
+        play: function () {
+            if (!(player.i in player.notes)) {
+                return;
+            }
+            player.playNote(player.notes[player.i], player.duration[player.i] * player.rate, player.play);
+            $('#i').val(player.i++);
+        }
+    };
+
+    $(function () {
+        $('#play').on('click', function () {
+            player.init();
+            player.i = parseInt($('#i').val());
+            player.rate = parseFloat($('#rate').val());
+            player.run = true;
+            eval('player.notes = [' + $('#notes').val() + '];');
+            eval('player.duration = [' + $('#duration').val() + '];');
+            player.play();
+        });
+        $('#stop').on('click', function () {
+            player.run= false;
+        });
+    });
+</script>
+
+<table>
+    <tr>
+        <td colspan="2">
+            <button id="play">Play</button>
+            <button id="stop">Stop</button>
+            <input id="i" type="text" value="0">
+            <input id="rate" type="text" value="1">
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <textarea id="notes" style="width: 400px; height: 800px; border: solid 1px #000000">
+E4, G4, A4, A4, 0,
+A4, B4, C5, C5, 0,
+C5, D5, B4, B4, 0,
+A4, G4, A4, 0,
+
+E4, G4, A4, A4, 0,
+A4, B4, C5, C5, 0,
+C5, D5, B4, B4, 0,
+A4, G4, A4, 0,
+
+E4, G4, A4, A4, 0,
+A4, C5, D5, D5, 0,
+D5, E5, F5, F5, 0,
+E5, D5, E5, A4, 0,
+
+A4, B4, C5, C5, 0,
+D5, E5, A4, 0,
+A4, C5, B4, B4, 0,
+C5, A4, B4, 0,
+
+A4, A4,
+//Repeat of first part
+A4, B4, C5, C5, 0,
+C5, D5, B4, B4, 0,
+A4, G4, A4, 0,
+
+E4, G4, A4, A4, 0,
+A4, B4, C5, C5, 0,
+C5, D5, B4, B4, 0,
+A4, G4, A4, 0,
+
+E4, G4, A4, A4, 0,
+A4, C5, D5, D5, 0,
+D5, E5, F5, F5, 0,
+E5, D5, E5, A4, 0,
+
+A4, B4, C5, C5, 0,
+D5, E5, A4, 0,
+A4, C5, B4, B4, 0,
+C5, A4, B4, 0,
+//End of Repeat
+
+E5, 0, 0, F5, 0, 0,
+E5, E5, 0, G5, 0, E5, D5, 0, 0,
+D5, 0, 0, C5, 0, 0,
+B4, C5, 0, B4, 0, A4,
+
+E5, 0, 0, F5, 0, 0,
+E5, E5, 0, G5, 0, E5, D5, 0, 0,
+D5, 0, 0, C5, 0, 0,
+B4, C5, 0, B4, 0, A4
+            </textarea>
+        </td>
+        <td>
+            <textarea id="duration" style="width: 400px; height: 800px; border: solid 1px #000000">
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 375, 125,
+
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 375, 125,
+
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 125, 250, 125,
+
+125, 125, 250, 125, 125,
+250, 125, 250, 125,
+125, 125, 250, 125, 125,
+125, 125, 375, 375,
+
+250, 125,
+//Rpeat of First Part
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 375, 125,
+
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 375, 125,
+
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 250, 125, 125,
+125, 125, 125, 250, 125,
+
+125, 125, 250, 125, 125,
+250, 125, 250, 125,
+125, 125, 250, 125, 125,
+125, 125, 375, 375,
+//End of Repeat
+
+250, 125, 375, 250, 125, 375,
+125, 125, 125, 125, 125, 125, 125, 125, 375,
+250, 125, 375, 250, 125, 375,
+125, 125, 125, 125, 125, 500,
+
+250, 125, 375, 250, 125, 375,
+125, 125, 125, 125, 125, 125, 125, 125, 375,
+250, 125, 375, 250, 125, 375,
+125, 125, 125, 125, 125, 500
+            </textarea>
+        </td>
+    </tr>
+
+</table>
+
+
+
+</body>
+</html>
