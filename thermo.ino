@@ -13,6 +13,7 @@ DeviceAddress thermometer[3] =
   { 0x28, 0xFF, 0xA5, 0xEC, 0xC1, 0x17, 0x5, 0xB7 }
 };
 float thermo[4] = {0, 0, 0, 0};
+float thermoMatrix[4][10] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int thermoCalibration[103];
 void thermoSetupCalibration() {
