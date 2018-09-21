@@ -1,6 +1,7 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
+#include <Wire.h>
 
 IPAddress    apIP(192, 168, 1, 1);  // Defining a static IP address: local & gateway
 // Default IP in AP mode is 192.168.4.1
@@ -89,12 +90,15 @@ void handleNotFound() {
 }
 
 void setup() {
-  pinMode ( ledPin, OUTPUT );
-  digitalWrite ( ledPin, 0 );
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, 0);
 
   delay(1000);
   Serial.begin(115200);
   Serial.println();
+
+  Wire.begin(D1, D2);
+  
   Serial.println("Configuring access point...");
 
   //set-up the custom IP address
@@ -108,10 +112,10 @@ void setup() {
   Serial.print("AP IP address: ");
   Serial.println(myIP);
 
-  server.on ( "/", handleRoot );
-  server.on ( "/led=1", handleRoot);
-  server.on ( "/led=0", handleRoot);
-  server.on ( "/inline", []() {
+  server.on("/", handleRoot);
+  server.on("/led=1", handleRoot);
+  server.on("/led=0", handleRoot);
+  server.on("/inline", []() {
     server.send ( 200, "text/plain", "this works as well" );
   } );
   server.onNotFound ( handleNotFound );
@@ -122,4 +126,13 @@ void setup() {
 
 void loop() {
   server.handleClient();
+  Wire.beginTransmission(8); /* Начинаем передачу на адресе 8 */
+  Wire.write("Hello Arduino");  /* Отправляем "hello Arduino" */
+  Wire.endTransmission();    /* прекращаем передачу */
+  
+  Wire.requestFrom(8, 13); /* запрашиваем и считываем данные с 8 и 13 адреса slave устройства */
+  while(Wire.available()){
+    char c = Wire.read();
+    Serial.print(c);
+  }
 }

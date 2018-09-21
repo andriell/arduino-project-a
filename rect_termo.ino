@@ -69,6 +69,7 @@ void loop() {
 
   prog1Loop();
   prog2Loop();
+  cookLoop();
 
   logLoop();
 

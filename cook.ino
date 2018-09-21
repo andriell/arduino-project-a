@@ -2,6 +2,8 @@
 #define COOK_O_PIN 34
 #define COOK_M_PIN 35
 
+unsigned long cookTime = 0UL;
+
 void cookSetup() {
   pinMode(COOK_P_PIN, OUTPUT);
   pinMode(COOK_O_PIN, OUTPUT);
@@ -10,6 +12,15 @@ void cookSetup() {
   digitalWrite(COOK_P_PIN, HIGH);
   digitalWrite(COOK_O_PIN, HIGH);
   digitalWrite(COOK_M_PIN, HIGH);
+}
+
+void cookLoop() {
+  if (cookTime > 10UL && millis() - cookTime > 1800000UL) {
+    Serial.println("Cook restart");
+    cookTime = millis();
+    cookP(1);
+    cookM(1);
+  }
 }
 
 void cookMenu() {
@@ -34,6 +45,7 @@ void cookOn() {
   digitalWrite(COOK_O_PIN, LOW);
   delay(200);
   digitalWrite(COOK_O_PIN, HIGH);
+  cookTime = millis();
 }
 
 void cookP(int n) {
@@ -96,5 +108,6 @@ void cookOff() {
   digitalWrite(COOK_O_PIN, LOW);
   delay(200);
   digitalWrite(COOK_O_PIN, HIGH);
+  cookTime = 0;
 }
 
